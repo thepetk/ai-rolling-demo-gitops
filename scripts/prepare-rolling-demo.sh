@@ -45,7 +45,7 @@ echo "OK"
 # Create the necessary ServiceAccount token
 echo "Creating the k8s sa token.."
 kubectl create serviceaccount k8s-sa -n $RHDH_NAMESPACE
-kubectl create rolebinding k8s-admin-binding   --clusterrole=admin   --serviceaccount=$RHDH_NAMESPACE:k8s-sa   --namespace=$RHDH_NAMESPACE
+kubectl create rolebinding k8s-admin-binding   --clusterrole=cluster-reader   --serviceaccount=$RHDH_NAMESPACE:k8s-sa   --namespace=$RHDH_NAMESPACE
 K8S_CLUSTER_TOKEN=$(kubectl create token k8s-sa -n $RHDH_NAMESPACE)
 echo "OK"
 

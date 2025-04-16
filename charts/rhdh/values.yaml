@@ -312,6 +312,19 @@ backstage:
               - https://argo-cd.readthedocs.io
               - https://instructlab.ai
               - https://quay.io
+          reading:
+            allow:
+              - host: example.com
+              - host: '*.mozilla.org'
+              - host: '*.openshift.com'
+              - host: '*.openshiftapps.com'
+              - host: '10.*:9090'
+              - host: '127.0.0.1:9090'
+              - host: '127.0.0.1:8080'
+              - host: '127.0.0.1:7070'
+              - host: 'localhost:9090'
+              - host: 'localhost:8080'
+              - host: 'localhost:7070'
         signInPage: oidc
         catalog:
           rules:
@@ -328,6 +341,9 @@ backstage:
               rules:
                 - allow: [Component, Resource, Api]
           providers:
+            modelCatalog:
+              development:
+                baseUrl: http://localhost:9090
             github:
               providerId:
                 organization: "fpetk"
