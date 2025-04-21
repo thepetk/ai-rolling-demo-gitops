@@ -3,7 +3,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: rhdh-rhoai-bridge
-  namespace: ai-rhdh
+  namespace: rolling-demo-ns
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -42,7 +42,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: rhdh-rhoai-bridge
-    namespace: ai-rhdh
+    namespace: rolling-demo-ns
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
@@ -56,13 +56,13 @@ roleRef:
 subjects:
   - apiGroup: rbac.authorization.k8s.io
     kind: Group
-    name: system:serviceaccounts:ai-rhdh
+    name: system:serviceaccounts:rolling-demo-ns
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: rhdh-rhoai-bridge
-  namespace: ai-rhdh
+  namespace: rolling-demo-ns
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -70,13 +70,13 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: rhdh-rhoai-bridge
-    namespace: ai-rhdh
+    namespace: rolling-demo-ns
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: rhdh-rhoai-bridge
-  namespace: ai-rhdh
+  namespace: rolling-demo-ns
 rules:
   - apiGroups: [""]
     resources: ["configmaps"]
@@ -86,7 +86,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: rhdh-rhoai-bridge-token
-  namespace: ai-rhdh
+  namespace: rolling-demo-ns
   annotations:
     kubernetes.io/service-account.name: rhdh-rhoai-bridge
 type: kubernetes.io/service-account-token
