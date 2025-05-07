@@ -20,8 +20,13 @@ spec:
               echo "Checking if containers already exist in deployment..."
               CONTAINERS=$(kubectl get deployment $DEPLOYMENT -n $NAMESPACE -o json | jq '.spec.template.spec.containers[] | .name')
 
-              # Container Specs (Location, Storage-REST and RHOAI Normalizer)
-              LOCATION_CONTAINER='{
+              # Create temp dir and files
+              TEMP_DIR=$(mktemp -d)
+              PATCH_FILE="${TEMP_DIR}/patch.json"
+
+              # Create the container definition files
+              cat > "${TEMP_DIR}/location.json" <<EOF
+              {
                 "name": "location",
                 "env": [
                   { "name": "NORMALIZER_FORMAT", "value": "JsonArrayFormat" },
@@ -45,9 +50,11 @@ spec:
                 },
                 "volumeMounts": [{ "mountPath": "/opt/app-root/src/dynamic-plugins-root", "name": "dynamic-plugins-root" }],
                 "workingDir": "/opt/app-root/src"
-              }'
+              }
+              EOF
 
-              STORAGE_REST_CONTAINER='{
+              cat > "${TEMP_DIR}/storage-rest.json" <<EOF
+              {
                 "name": "storage-rest",
                 "env": [
                   { "name": "NORMALIZER_FORMAT", "value": "JsonArrayFormat" },
@@ -65,9 +72,11 @@ spec:
                 "ports": [{ "containerPort": 9090, "name": "location", "protocol": "TCP" }],
                 "volumeMounts": [{ "mountPath": "/opt/app-root/src/dynamic-plugins-root", "name": "dynamic-plugins-root" }],
                 "workingDir": "/opt/app-root/src"
-              }'
+              }
+              EOF
 
-              RHOAI_NORMALIZER_CONTAINER='{
+              cat > "${TEMP_DIR}/rhoai-normalizer.json" <<EOF
+              {
                 "name": "rhoai-normalizer",
                 "env": [
                   { "name": "NORMALIZER_FORMAT", "value": "JsonArrayFormat" },
@@ -85,50 +94,63 @@ spec:
                 "ports": [{ "containerPort": 9090, "name": "location", "protocol": "TCP" }],
                 "volumeMounts": [{ "mountPath": "/opt/app-root/src/dynamic-plugins-root", "name": "dynamic-plugins-root" }],
                 "workingDir": "/opt/app-root/src"
-              }'
+              }
+              EOF
 
-              # Helper string to compose the command
-              PATCH_OPS="["
+              # build the file used for patching
+              echo "[" > "$PATCH_FILE"
 
-              # For each one of the containers we check if they exist and the action
-              # is then defined (replace vs add)
+              add_patch_operation() {
+                local operation=$1
+                local path=$2
+                local json_file=$3
+                local is_last=$4
+                
+                echo "  {" >> "$PATCH_FILE"
+                echo "    \"op\": \"$operation\"," >> "$PATCH_FILE"
+                echo "    \"path\": \"$path\"," >> "$PATCH_FILE"
+                echo "    \"value\": $(cat $json_file)" >> "$PATCH_FILE"
+                if [ "$is_last" = "true" ]; then
+                  echo "  }" >> "$PATCH_FILE"
+                else
+                  echo "  }," >> "$PATCH_FILE"
+                fi
+              }
+
+              # check action for each one of the containers
               if echo "$CONTAINERS" | grep -q '"location"'; then
-                echo "Container 'location' already exists, replacing..."
+                echo "Container 'location' already exists, will replace..."
                 LOCATION_INDEX=$(kubectl get deployment $DEPLOYMENT -n $NAMESPACE -o json | jq '.spec.template.spec.containers | map(.name == "location") | index(true)')
-                PATCH_OPS+="{ \"op\": \"replace\", \"path\": \"/spec/template/spec/containers/$LOCATION_INDEX\", \"value\": $LOCATION_CONTAINER },"
+                add_patch_operation "replace" "/spec/template/spec/containers/$LOCATION_INDEX" "${TEMP_DIR}/location.json" "false"
               else
-                echo "Container 'location' does not exist, adding..."
-                PATCH_OPS+="{ \"op\": \"add\", \"path\": \"/spec/template/spec/containers/-\", \"value\": $LOCATION_CONTAINER },"
+                echo "Container 'location' does not exist, will add..."
+                add_patch_operation "add" "/spec/template/spec/containers/-" "${TEMP_DIR}/location.json" "false"
               fi
 
               if echo "$CONTAINERS" | grep -q '"storage-rest"'; then
-                echo "Container 'storage-rest' already exists, replacing..."
+                echo "Container 'storage-rest' already exists, will replace..."
                 STORAGE_REST_INDEX=$(kubectl get deployment $DEPLOYMENT -n $NAMESPACE -o json | jq '.spec.template.spec.containers | map(.name == "storage-rest") | index(true)')
-                PATCH_OPS+="{ \"op\": \"replace\", \"path\": \"/spec/template/spec/containers/$STORAGE_REST_INDEX\", \"value\": $STORAGE_REST_CONTAINER },"
+                add_patch_operation "replace" "/spec/template/spec/containers/$STORAGE_REST_INDEX" "${TEMP_DIR}/storage-rest.json" "false"
               else
-                echo "Container 'storage-rest' does not exist, adding..."
-                PATCH_OPS+="{ \"op\": \"add\", \"path\": \"/spec/template/spec/containers/-\", \"value\": $STORAGE_REST_CONTAINER },"
+                echo "Container 'storage-rest' does not exist, will add..."
+                add_patch_operation "add" "/spec/template/spec/containers/-" "${TEMP_DIR}/storage-rest.json" "false"
               fi
 
-              # Check and handle "rhoai-normalizer" container
               if echo "$CONTAINERS" | grep -q '"rhoai-normalizer"'; then
-                echo "Container 'rhoai-normalizer' already exists, replacing..."
+                echo "Container 'rhoai-normalizer' already exists, will replace..."
                 RHOAI_NORMALIZER_INDEX=$(kubectl get deployment $DEPLOYMENT -n $NAMESPACE -o json | jq '.spec.template.spec.containers | map(.name == "rhoai-normalizer") | index(true)')
-                PATCH_OPS+="{ \"op\": \"replace\", \"path\": \"/spec/template/spec/containers/$RHOAI_NORMALIZER_INDEX\", \"value\": $RHOAI_NORMALIZER_CONTAINER },"
+                add_patch_operation "replace" "/spec/template/spec/containers/$RHOAI_NORMALIZER_INDEX" "${TEMP_DIR}/rhoai-normalizer.json" "true"
               else
-                echo "Container 'rhoai-normalizer' does not exist, adding..."
-                PATCH_OPS+="{ \"op\": \"add\", \"path\": \"/spec/template/spec/containers/-\", \"value\": $RHOAI_NORMALIZER_CONTAINER },"
+                echo "Container 'rhoai-normalizer' does not exist, will add..."
+                add_patch_operation "add" "/spec/template/spec/containers/-" "${TEMP_DIR}/rhoai-normalizer.json" "true"
               fi
 
-              # Finalize the json produced by the job
-              # small catch is to remove the trailing comma.
-              PATCH_OPS=$(echo "$PATCH_OPS" | sed 's/,$//')
-              PATCH_OPS+="]"
+              echo "]" >> "$PATCH_FILE"
 
-              echo "Applied patch in detail:"
-              echo "$PATCH_OPS" | jq '.'
+              echo "Applied in detail:"
+              cat "$PATCH_FILE" | jq '.'
 
-              echo "Patching.."
-              kubectl patch deployment $DEPLOYMENT -n $NAMESPACE --type='json' -p="$PATCH_OPS"
+              echo "Patching ${DEPLOYMENT} .."
+              kubectl patch deployment $DEPLOYMENT -n $NAMESPACE --type='json' --patch="$(cat $PATCH_FILE)"
       restartPolicy: OnFailure
   backoffLimit: 4
