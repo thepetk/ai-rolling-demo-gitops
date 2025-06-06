@@ -272,7 +272,7 @@ backstage:
       image:
         registry: quay.io
         repository: rhdh/rhdh-hub-rhel9
-        tag: "1.6"
+        tag: "1.5"
         pullSecrets:
           - quay-pull-secret
       command: []
@@ -345,7 +345,7 @@ backstage:
               rules:
                 - allow: [Component, System]
               type: url
-            - target: https://github.com/redhat-ai-dev/ai-lab-template/blob/rolling-demo/all.yaml
+            - target: https://github.com/thepetk/ai-lab-template/blob/rolling-demo/all.yaml
               type: url
           providers:
             modelCatalog:
