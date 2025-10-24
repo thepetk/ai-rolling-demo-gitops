@@ -119,8 +119,7 @@ global:
                       props:
                         title: OpenShift AI
                         icon: https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg
-                        link: https://rhods-dashboard-redhat-ods-applications.apps.rosa.redhat-ai-dev.m6no.p3.openshiftapps.com/
-
+                        link: https://rhods-dashboard-redhat-ods-applications.apps.tpetkos-aicluster01.devcluster.openshift.com/
                   - mountPoint: global.header/application-launcher
                     importName: MenuItemLink
                     config:
@@ -142,6 +141,16 @@ global:
                         title: Instructlab
                         icon: https://instructlab.ai/logo.png
                         link: https://instructlab.ai/
+
+                  - mountPoint: global.header/application-launcher
+                    importName: MenuItemLink
+                    config:
+                      section: Quick Links
+                      priority: 150
+                      props:
+                        title: MCP Tools Guide
+                        icon: https://upload.wikimedia.org/wikipedia/commons/0/01/Google_Docs_logo_%282014-2020%29.svg
+                        link: https://docs.google.com/document/d/1o9qRYCAszGzTwW2mRjC4c9wFwJIx8J3XF1kGPFy5F1s/edit?tab=t.0
 
                   - mountPoint: global.header/application-launcher
                     importName: MenuItemLink
@@ -276,7 +285,7 @@ global:
                       icon: LightspeedIcon
                       text: Lightspeed
       - disabled: false
-        package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed-backend:next__1.0.0!red-hat-developer-hub-backstage-plugin-lightspeed-backend
+        package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed-backend:pr_1580__1.0.1!red-hat-developer-hub-backstage-plugin-lightspeed-backend
       - disabled: false
         package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-plugin-mcp-actions-backend:next__0.1.2!backstage-plugin-mcp-actions-backend
       - disabled: false
@@ -306,7 +315,7 @@ global:
                     importName: TektonCI
                     mountPoint: entity.page.ci/cards
 
-  clusterRouterBase: apps.rosa.redhat-ai-dev.m6no.p3.openshiftapps.com
+  clusterRouterBase: apps.tpetkos-aicluster01.devcluster.openshift.com
   host: ""
   auth:
     backend:
@@ -421,7 +430,7 @@ backstage:
               rules:
                 - allow: [Component, System]
               type: url
-            - target: https://github.com/redhat-ai-dev/ai-lab-template/blob/ai-rolling-demo/all.yaml
+            - target: https://github.com/thepetk/ai-lab-template/blob/ai-rolling-demo-1_8/all.yaml
               type: url
           providers:
             modelCatalog:
@@ -429,7 +438,7 @@ backstage:
                 baseUrl: http://localhost:9090
             github:
               providerId:
-                organization: "ai-rolling-demo"
+                organization: "fpetk"
                 schedule:
                   frequency:
                     minutes: 15
@@ -439,7 +448,7 @@ backstage:
                     minutes: 15
             githubOrg:
               githubUrl: https://github.com
-              orgs: ["ai-rolling-demo"]
+              orgs: ["fpetk"]
               schedule:
                 frequency:
                   minutes: 15
@@ -461,6 +470,10 @@ backstage:
                 signIn:
                   resolvers:
                     - resolver: emailMatchingUserEntityProfileEmail
+        lightspeed:
+          mcpServers:
+            - name: mcp-integration-tools
+              token: ${MCP_TOKEN}
         integrations:
           github:
             - apps:
