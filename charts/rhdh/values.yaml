@@ -149,6 +149,16 @@ global:
                       section: Quick Links
                       priority: 150
                       props:
+                        title: MCP Tools Guide
+                        icon: https://upload.wikimedia.org/wikipedia/commons/0/01/Google_Docs_logo_%282014-2020%29.svg
+                        link: https://docs.google.com/document/d/1o9qRYCAszGzTwW2mRjC4c9wFwJIx8J3XF1kGPFy5F1s/edit?tab=t.0
+
+                  - mountPoint: global.header/application-launcher
+                    importName: MenuItemLink
+                    config:
+                      section: Quick Links
+                      priority: 150
+                      props:
                         title: Quay.io
                         icon: https://quay.io/static/img/quay_favicon.png
                         link: https://quay.io
@@ -276,7 +286,7 @@ global:
                       icon: LightspeedIcon
                       text: Lightspeed
       - disabled: false
-        package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed-backend:next__1.0.0!red-hat-developer-hub-backstage-plugin-lightspeed-backend
+        package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed-backend:pr_1580__1.0.1!red-hat-developer-hub-backstage-plugin-lightspeed-backend
       - disabled: false
         package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-plugin-mcp-actions-backend:next__0.1.2!backstage-plugin-mcp-actions-backend
       - disabled: false
@@ -421,7 +431,7 @@ backstage:
               rules:
                 - allow: [Component, System]
               type: url
-            - target: https://github.com/redhat-ai-dev/ai-lab-template/blob/ai-rolling-demo/all.yaml
+            - target: https://github.com/redhat-ai-dev/ai-lab-template/blob/ai-rolling-demo-1_8/all.yaml
               type: url
           providers:
             modelCatalog:
@@ -461,6 +471,10 @@ backstage:
                 signIn:
                   resolvers:
                     - resolver: emailMatchingUserEntityProfileEmail
+        lightspeed:
+          mcpServers:
+            - name: mcp-integration-tools
+              token: ${MCP_TOKEN}
         integrations:
           github:
             - apps:
