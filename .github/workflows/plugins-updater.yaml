@@ -1,0 +1,28 @@
+name: Update RHDH Plugins
+
+on:
+    schedule:
+        - cron: "0 * * * *"
+    workflow_dispatch:
+
+jobs:
+    update-plugins:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            pull-requests: write
+            packages: read
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+            - name: Update plugins for next__ and bs_1.42.5__ tags
+              uses: thepetk/rhdh-plugin-gitops-updater@6a8a8038c0c44fa91473ed833986073b415520e9 # v1.0.3
+              with:
+                  config-path: "charts/rhdh/values.yaml"
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  tag-prefixes: |
+                      next__
+                      bs_1.42.5__
+                  update-pr-strategy: "separate"
+                  verbose: "1"
