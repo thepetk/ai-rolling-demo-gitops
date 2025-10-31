@@ -19,6 +19,8 @@ data:
     user_data_collection:
       feedback_enabled: true
       feedback_storage: "/tmp/data/feedback"
+      transcripts_enabled: true
+      transcripts_storage: "/tmp/data/transcripts"
     authentication:
       module: "noop"
     conversation_cache:
@@ -29,15 +31,3 @@ data:
       - name: mcp-integration-tools
         provider_id: "model-context-protocol"
         url: "http://rolling-demo-backstage.rolling-demo-ns.svc.cluster.local:7007/api/mcp-actions/v1"
-    providers:
-      inference:
-        - provider_id: vertex_ai
-          provider_type: remote::google_vertex_ai
-          config:
-            api_key: ${env.VLLM_API_KEY}
-            url: https://generativelanguage.googleapis.com/v1/models
-    models:
-      - model_id: gemini-2.5-flash
-        provider_id: vertex_ai
-        model_type: llm
-        provider_model_id: gemini-2.5-flash
