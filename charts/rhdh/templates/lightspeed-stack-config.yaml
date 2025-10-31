@@ -20,7 +20,7 @@ data:
       feedback_enabled: true
       feedback_storage: "/tmp/data/feedback"
       transcripts_enabled: true
-      transcripts_storage: "/tmp/data/transcripts"
+      transcripts_storage: "/tmp/data/feedback/transcripts"
     authentication:
       module: "noop"
     conversation_cache:
