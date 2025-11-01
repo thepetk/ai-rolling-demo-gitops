@@ -601,6 +601,12 @@ backstage:
           emptyDir: {}
         - name: rag-data-volume
           emptyDir: {}
+        - name: gcp-credentials
+          secret:
+            secretName: gcp-service-account-key
+            items:
+              - key: key.json
+                path: credentials.json
       initContainers:
         - name: install-dynamic-plugins
           image: '{{ include "backstage.image" . }}'

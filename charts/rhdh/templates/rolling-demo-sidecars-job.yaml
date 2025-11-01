@@ -108,6 +108,9 @@ spec:
               cat > "${TEMP_DIR}/llama-stack-sidecar.json" <<EOF
               {
                 "name": "llama-stack",
+                "env": [
+                  { "name": "GOOGLE_APPLICATION_CREDENTIALS", "value": "/var/secrets/google/credentials.json" }
+                ],
                 "envFrom": [
                   { "secretRef": { "name": "llama-stack-secrets" } }
                 ],
@@ -116,7 +119,8 @@ spec:
                 "volumeMounts": [
                   { "mountPath": "/app-root/.llama", "name": "shared-storage" },
                   { "mountPath": "/app-root/embeddings_model", "name": "rag-data-volume", "subPath": "embeddings_model" },
-                  { "mountPath": "/app-root/vector_db/rhdh_product_docs", "name": "rag-data-volume", "subPath": "rhdh_product_docs" }
+                  { "mountPath": "/app-root/vector_db/rhdh_product_docs", "name": "rag-data-volume", "subPath": "rhdh_product_docs" },
+                  { "mountPath": "/var/secrets/google", "name": "gcp-credentials", "readOnly": true }
                 ]
               }
               EOF
