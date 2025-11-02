@@ -108,9 +108,6 @@ spec:
               cat > "${TEMP_DIR}/llama-stack-sidecar.json" <<EOF
               {
                 "name": "llama-stack",
-                "env": [
-                  { "name": "GOOGLE_APPLICATION_CREDENTIALS", "value": "/var/secrets/google/credentials.json" }
-                ],
                 "envFrom": [
                   { "secretRef": { "name": "llama-stack-secrets" } }
                 ],
