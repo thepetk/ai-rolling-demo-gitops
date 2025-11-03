@@ -16,13 +16,13 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
-            - name: Update plugins for next__ and bs_1.42.5__ tags
-              uses: thepetk/rhdh-plugin-gitops-updater@6a8a8038c0c44fa91473ed833986073b415520e9 # v1.0.3
+            - name: Update plugins for next__ and bs_ tags
+              uses: thepetk/rhdh-plugin-gitops-updater@276fc27ba029bfdbbcf9a59854a56e11c0a052a7 # v1.0.4
               with:
                   config-path: "charts/rhdh/values.yaml"
                   github-token: ${{ secrets.GITHUB_TOKEN }}
                   tag-prefixes: |
                       next__
-                      bs_1.42.5__
+                      bs_
                   update-pr-strategy: "separate"
                   verbose: "1"
