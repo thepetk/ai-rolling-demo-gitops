@@ -601,6 +601,10 @@ backstage:
           emptyDir: {}
         - name: rag-data-volume
           emptyDir: {}
+        - name: google-credentials
+          secret:
+            secretName: google-credentials
+            defaultMode: 420
       initContainers:
         - name: install-dynamic-plugins
           image: '{{ include "backstage.image" . }}'
