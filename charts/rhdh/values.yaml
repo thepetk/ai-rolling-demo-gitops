@@ -4,7 +4,7 @@ global:
       - "dynamic-plugins.default.yaml"
     plugins:
       - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-dynamic-home-page
-        disabled: true
+        disabled: false
       - package: oci://quay.io/tpetkos/customized-sign-in-page:v0.1.0!red-hat-developer-hub-backstage-plugin-customized-sign-in-page
         disabled: false
         pluginConfig:
@@ -16,6 +16,9 @@ global:
       - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-global-header
         disabled: false
         pluginConfig:
+          app:
+            sidebar:
+              search: false
           dynamicPlugins:
             frontend:
               default.main-menu-items:
@@ -28,22 +31,23 @@ global:
                     icon: admin
               red-hat-developer-hub.backstage-plugin-global-header:
                 mountPoints:
+
                   - mountPoint: application/header
                     importName: GlobalHeader
                     config:
-                      position: above-main-content # above-main-content | below-main-content
+                      position: above-main-content
 
                   - mountPoint: global.header/component
                     importName: SearchComponent
                     config:
-                      priority: 100
+                      priority: 110
 
                   - mountPoint: global.header/component
                     importName: Spacer
                     config:
-                      priority: 99
+                      priority: 100
                       props:
-                        growFactor: 0
+                        growFactor: 1
 
                   - mountPoint: global.header/component
                     importName: HeaderIconButton
@@ -62,17 +66,22 @@ global:
                   - mountPoint: global.header/component
                     importName: ApplicationLauncherDropdown
                     config:
-                      priority: 82
+                      priority: 80
 
                   - mountPoint: global.header/component
+                    importName: HelpDropdown
+                    config:
+                      priority: 70
+
+                  - mountPoint: global.header/help
                     importName: SupportButton
                     config:
-                      priority: 80
+                      priority: 10
 
                   - mountPoint: global.header/component
                     importName: NotificationButton
                     config:
-                      priority: 70
+                      priority: 60
 
                   - mountPoint: global.header/component
                     importName: Divider
@@ -84,64 +93,55 @@ global:
                     config:
                       priority: 10
 
-                  - mountPoint: global.header/profile
+                  - mountPoint: global.header/application-launcher
                     importName: MenuItemLink
                     config:
-                      priority: 100
+                      section: Documentation
+                      priority: 300
                       props:
-                        title: Settings
-                        link: /settings
-                        icon: manageAccounts
-
-                  - mountPoint: global.header/profile
-                    importName: LogoutButton
-                    config:
-                      priority: 10
+                        title: Developer Hub
+                        icon: https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg
+                        link: https://docs.redhat.com/en/documentation/red_hat_developer_hub
 
                   - mountPoint: global.header/application-launcher
                     importName: MenuItemLink
                     config:
-                      section: Red Hat AI
-                      sectionLink: https://www.redhat.com/en/products/ai
-                      sectionLinkLabel: Read more
+                      section: Documentation
+                      priority: 290
+                      props:
+                        title: Openshift AI Docs
+                        icon: https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg
+                        link: https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed
+
+                  - mountPoint: global.header/application-launcher
+                    importName: MenuItemLink
+                    config:
+                      section: Developer Tools
                       priority: 200
                       props:
-                        title: Podman Desktop
-                        icon: https://podman-desktop.io/img/logo.svg
-                        link: https://podman-desktop.io/
-
-                  - mountPoint: global.header/application-launcher
-                    importName: MenuItemLink
-                    config:
-                      section: Red Hat AI
-                      sectionLinkLabel: Read more
-                      priority: 170
-                      props:
-                        title: OpenShift AI
+                        title: RHDH Local
                         icon: https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg
-                        link: https://rhods-dashboard-redhat-ods-applications.apps.rosa.redhat-ai-dev.m6no.p3.openshiftapps.com/
+                        link: https://github.com/redhat-developer/rhdh-local
 
                   - mountPoint: global.header/application-launcher
                     importName: MenuItemLink
                     config:
-                      section: Red Hat AI
-                      sectionLinkLabel: Read more
-                      priority: 160
+                      section: Developer Tools
+                      priority: 190
                       props:
-                        title: RHEL AI
+                        title: RHDH Dynamic Plugin Factory
                         icon: https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg
-                        link: https://www.redhat.com/en/products/ai/enterprise-linux-ai
+                        link: https://github.com/redhat-developer/rhdh-plugins
 
                   - mountPoint: global.header/application-launcher
                     importName: MenuItemLink
                     config:
-                      section: Red Hat AI
-                      sectionLinkLabel: Read more
-                      priority: 150
+                      section: Developer Tools
+                      priority: 180
                       props:
-                        title: Instructlab
-                        icon: https://instructlab.ai/logo.png
-                        link: https://instructlab.ai/
+                        title: RHDH CLI
+                        icon: https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg
+                        link: https://github.com/redhat-developer/rhdh-cli
 
                   - mountPoint: global.header/application-launcher
                     importName: MenuItemLink
@@ -157,60 +157,35 @@ global:
                     importName: MenuItemLink
                     config:
                       section: Quick Links
-                      priority: 150
-                      props:
-                        title: Quay.io
-                        icon: https://quay.io/static/img/quay_favicon.png
-                        link: https://quay.io
-
-                  - mountPoint: global.header/application-launcher
-                    importName: MenuItemLink
-                    config:
-                      section: Quick Links
                       priority: 140
                       props:
-                        title: Slack
-                        icon: https://upload.wikimedia.org/wikipedia/commons/d/d5/Slack_icon_2019.svg
-                        link: https://slack.com/
-
-                  - mountPoint: global.header/application-launcher
-                    importName: MenuItemLink
-                    config:
-                      section: Quick Links
-                      priority: 130
-                      props:
-                        title: ArgoCD
-                        icon: https://argo-cd.readthedocs.io/en/stable/assets/logo.png
-                        link: https://argo-cd.readthedocs.io/en/stable/
-
-                  - mountPoint: global.header/application-launcher
-                    importName: MenuItemLink
-                    config:
-                      section: Quick Links
-                      priority: 120
-                      props:
-                        title: Openshift
+                        title: Openshift AI
                         icon: https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg
-                        link: https://www.redhat.com/en/technologies/cloud-computing/openshift
-      - package: oci://quay.io/karthik_jk/ai-experience:1.6.1!red-hat-developer-hub-backstage-plugin-ai-experience
-        disabled: false
-        pluginConfig:
-          dynamicPlugins:
-            frontend:
-              red-hat-developer-hub.backstage-plugin-ai-experience:
-                appIcons:
-                  - name: aiNewsIcon
-                    importName: AiNewsIcon
-                dynamicRoutes:
-                  - path: /
-                    importName: AiExperiencePage
-                  - path: /ai-news
-                    importName: AiNewsPage
-                    menuItem:
-                      icon: aiNewsIcon
-                      text: AI News
-      - package: oci://quay.io/karthik_jk/ai-experience:1.6.1!red-hat-developer-hub-backstage-plugin-ai-experience-backend-dynamic
-        disabled: false
+                        link: https://rhods-dashboard-redhat-ods-applications.apps.rosa.redhat-ai-dev.m6no.p3.openshiftapps.com/
+
+                  - mountPoint: global.header/support
+                    importName: MenuItemLink
+                    config:
+                      priority: 100
+                      props:
+                        title: Quickstart
+                        link: /quickstart
+                        icon: help
+
+                  - mountPoint: global.header/profile
+                    importName: MenuItemLink
+                    config:
+                      priority: 100
+                      props:
+                        title: Settings
+                        link: /settings
+                        icon: manageAccounts
+
+                  - mountPoint: global.header/profile
+                    importName: LogoutButton
+                    config:
+                      priority: 10
+
       - package: ./dynamic-plugins/dist/backstage-plugin-kubernetes-backend-dynamic
         disabled: false
       - package: ./dynamic-plugins/dist/backstage-plugin-kubernetes
