@@ -347,10 +347,10 @@ backstage:
                   resolvers:
                     - resolver: preferredUsernameMatchingUserEntityName
         backend:
-          actions:
-            pluginSources:
-              - 'software-catalog-mcp-tool'
-              - 'techdocs-mcp-tool'
+          # actions:
+          #   pluginSources:
+          #     - 'software-catalog-mcp-tool'
+          #     - 'techdocs-mcp-tool'
           auth:
             externalAccess:
               - type: static
