@@ -412,7 +412,7 @@ backstage:
               rules:
                 - allow: [Component, System]
               type: url
-            - target: https://github.com/thepetk/ai-lab-template/blob/ai-rolling-demo-1_9/all.yaml
+            - target: https://github.com/maysunfaisal/ai-lab-template/blob/ai-rolling-demo-1_8/all.yaml
               type: url
           providers:
             modelCatalog:
