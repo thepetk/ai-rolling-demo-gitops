@@ -78,8 +78,8 @@ export KEYCLOAK_CLIENT_ID="your-client-id"
 export KEYCLOAK_CLIENT_SECRET="your-secret"
 export KEYCLOAK_REALM="your-realm"
 export KEYCLOAK_LOGIN_REALM=${KEYCLOAK_REALM}
-export KEYCLOAK_METADATA_URL="https://your-keycloak-serivce-url/auth/realms/${KEYCLOAK_REALM}"
-export KEYCLOAK_BASE_URL="https://your-keycloak-serivce-url/auth"
+export KEYCLOAK_METADATA_URL="https://<your-keycloak-serivce-url>/auth/realms/${KEYCLOAK_REALM}"
+export KEYCLOAK_BASE_URL="https://<your-keycloak-serivce-url>/auth"
 
 # NOTE: For Ollama & Lightspeed we rely on 3Scale. Therefore,
 # to setup your Ollama & Lightspeed tokens & urls you'll need
@@ -92,13 +92,14 @@ export KEYCLOAK_BASE_URL="https://your-keycloak-serivce-url/auth"
 # - Secret: lightspeed-secrets (keys are identical with the env var names below).
 # Remember to Base64 Decode the values for the various environment variables stored in the `lightpseed-secrets`.
 export OLLAMA_TOKEN="your-ollama-token"
-export OLLAMA_URL="https://your-ollama-service-url/v1"
+export OLLAMA_URL="https://<your-ollama-service-url>/v1"
 
 # Llama Stack secrets (for Lightspeed Core Service)
-# Hint:: Per RHDHPAI case the Llama Stack tokens can be found in https://console-openshift-console.apps.rosa.redhat-ai-dev.m6no.p3.openshiftapps.com/
-# Secret: llama-stack-secrets (keys are identical with the env var names below).
+# Hint:: Per RHDHPAI case the Llama Stack tokens can be found in our dev instance:
+# - Namespace: rolling-demo-ns
+# - Secret: llama-stack-secrets (keys are identical with the env var names below).
 # Remember to Base64 Decode the values for the various environment variables stored in the `llama-stack-secrets`.
-export VLLM_URL="https://meta-llama-31-8b-3scale-apicast-production.apps.rosa.redhat-ai-dev.m6no.p3.openshiftapps.com:443/v1"
+export VLLM_URL="https://<your-llama-stack-service-url>/v1"
 export VLLM_API_KEY="your-llama-stack-token"
 # VALIDATION_PROVIDER: The LLM provider type - must be one of: vllm, ollama, openai
 export VALIDATION_PROVIDER="vllm"
