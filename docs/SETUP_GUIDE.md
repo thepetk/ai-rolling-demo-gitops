@@ -70,17 +70,16 @@ export QUAY_DOCKERCONFIGJSON="your-quay.io-dockerconfig.json"
 # In this area you can point to an already existing keycloak instance.
 
 # Hint:: As per RHDHPAI use case You could replace the values below with the ones in
-# the Dev Instance: https://console-openshift-console.apps.rosa.redhat-ai-dev.m6no.p3.openshiftapps.com/
-# Namespace: rolling-demo-ns and Secret: keycloak-secrets.
+# the Dev Instance:
+# - Namespace: rolling-demo-ns
+# - Secret: keycloak-secrets.
 # Remember to Base64 Decode the values for the various environment variables stored in the `keycloak-secrets`.
 export KEYCLOAK_CLIENT_ID="your-client-id"
 export KEYCLOAK_CLIENT_SECRET="your-secret"
-# KEYCLOAK_REALM: The realm you want to use for your deployment.
-# Check more info for realms here: https://www.keycloak.org/docs/latest/server_admin/index.html#_configuring-realms
 export KEYCLOAK_REALM="your-realm"
 export KEYCLOAK_LOGIN_REALM=${KEYCLOAK_REALM}
-export KEYCLOAK_METADATA_URL="https://keycloak-rh-sso.apps.rosa.redhat-ai-dev.m6no.p3.openshiftapps.com/auth/realms/${KEYCLOAK_REALM}"
-export KEYCLOAK_BASE_URL="https://keycloak-rh-sso.apps.rosa.redhat-ai-dev.m6no.p3.openshiftapps.com/auth"
+export KEYCLOAK_METADATA_URL="https://your-keycloak-serivce-url/auth/realms/${KEYCLOAK_REALM}"
+export KEYCLOAK_BASE_URL="https://your-keycloak-serivce-url/auth"
 
 # NOTE: For Ollama & Lightspeed we rely on 3Scale. Therefore,
 # to setup your Ollama & Lightspeed tokens & urls you'll need
@@ -88,12 +87,12 @@ export KEYCLOAK_BASE_URL="https://keycloak-rh-sso.apps.rosa.redhat-ai-dev.m6no.p
 # Check more info here: https://docs.redhat.com/en/documentation/red_hat_3scale_api_management/2.11/html/getting_started/first-steps-with-threescale_configuring-your-api
 
 # Ollama secrets
-# Hint:: Per RHDHPAI case the Lightspeed and Ollama tokens can be found in https://console-openshift-console.apps.rosa.redhat-ai-dev.m6no.p3.openshiftapps.com/
-# Namespace: rolling-demo-ns
-# Secret: lightspeed-secrets (keys are identical with the env var names below).
+# Hint:: Per RHDHPAI case the Lightspeed and Ollama tokens can be found in our Dev Instance:
+# - Namespace: rolling-demo-ns
+# - Secret: lightspeed-secrets (keys are identical with the env var names below).
 # Remember to Base64 Decode the values for the various environment variables stored in the `lightpseed-secrets`.
 export OLLAMA_TOKEN="your-ollama-token"
-export OLLAMA_URL="https://ollama-model-service-apicast-production.apps.rosa.redhat-ai-dev.m6no.p3.openshiftapps.com:443/v1"
+export OLLAMA_URL="https://your-ollama-service-url/v1"
 
 # Llama Stack secrets (for Lightspeed Core Service)
 # Hint:: Per RHDHPAI case the Llama Stack tokens can be found in https://console-openshift-console.apps.rosa.redhat-ai-dev.m6no.p3.openshiftapps.com/
