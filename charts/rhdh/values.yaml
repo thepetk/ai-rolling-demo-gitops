@@ -197,7 +197,7 @@ global:
         disabled: false
       - package:  ./dynamic-plugins/dist/backstage-community-plugin-catalog-backend-module-keycloak-dynamic
         disabled: false
-      - package: ./dynamic-plugins/dist/backstage-community-plugin-redhat-argocd
+      - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-redhat-argocd:bs_1.42.5__2.0.0!backstage-community-plugin-redhat-argocd
         disabled: false
         pluginConfig:
           dynamicPlugins:
@@ -309,7 +309,7 @@ backstage:
       image:
         registry: quay.io
         repository: rhdh/rhdh-hub-rhel9
-        tag: "1.8-190"
+        tag: "1.9-172"
         pullSecrets:
           - quay-pull-secret
       command: []
