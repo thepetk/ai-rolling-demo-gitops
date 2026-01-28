@@ -196,8 +196,7 @@ global:
         disabled: false
       - package:  ./dynamic-plugins/dist/backstage-community-plugin-catalog-backend-module-keycloak-dynamic
         disabled: false
-      - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-redhat-argocd:bs_1.42.5__2.0.0!backstage-community-plugin-redhat-argocd
-        disabled: false
+      - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-redhat-argocd:bs_1.42.5__2.0.0!
         pluginConfig:
           dynamicPlugins:
             frontend:
