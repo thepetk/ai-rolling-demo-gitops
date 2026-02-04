@@ -101,7 +101,7 @@ global:
                     mountPoint: entity.page.ci/cards
 
       # Quay Plugins
-      - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-scaffolder-backend-module-quay:bs_1.45.3__2.14.0!backstage-community-plugin-scaffolder-backend-module-quay
+      - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-scaffolder-backend-module-quay:bs_1.45.3__2.14.0
         disabled: false
 
       ##### Default Backstage Dynamic Plugins #####
