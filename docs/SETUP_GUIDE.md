@@ -120,10 +120,10 @@ export LIGHTSPEED_POSTGRES_DB="your-preffered-lightspeed-psql-dbname"
 
 ### Installation
 
-After configuring your `scripts/private-env` file, run the setup script from the repository root:
+After configuring your `scripts/private-env` file, run the setup from the repository root:
 
 ```bash
-bash setup.sh
+make install
 ```
 
 The `setup.sh` script automates the entire setup process:
@@ -144,7 +144,7 @@ You can skip earlier steps if they have already been completed on your cluster:
 For example, to jump straight to the rolling demo preparation:
 
 ```bash
-SKIP_INSTALL_DEPS=true SKIP_RHOAI_SETUP=true bash setup.sh
+SKIP_INSTALL_DEPS=true SKIP_RHOAI_SETUP=true make install
 ```
 
 #### Working from a fork

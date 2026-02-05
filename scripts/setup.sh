@@ -14,7 +14,7 @@ NFD_OPERATOR_PACKAGE="nfd"
 GPU_OPERATOR_NAMESPACE="nvidia-gpu-operator"
 GPU_OPERATOR_PACKAGE="gpu-operator-certified"
 
-GITOPS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+GITOPS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DEPS_DIR="$GITOPS_DIR/deps"
 SCRIPTS_DIR="$GITOPS_DIR/scripts"
 
