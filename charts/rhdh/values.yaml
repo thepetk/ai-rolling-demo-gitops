@@ -3,9 +3,8 @@ global:
     includes:
       - "dynamic-plugins.default.yaml"
     plugins:
-      - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-dynamic-home-page
-        disabled: false
-      - package: oci://quay.io/tpetkos/customized-sign-in-page:v0.1.0!red-hat-developer-hub-backstage-plugin-customized-sign-in-page
+      ##### Custom sign in page plugin #####
+      - package: oci://quay.io/tpetkos/customized-sign-in-page:v0.1.0
         disabled: false
         pluginConfig:
           dynamicPlugins:
@@ -13,192 +12,10 @@ global:
               red-hat-developer-hub.backstage-plugin-customized-sign-in-page:
                 signInPage:
                   importName: CustomizedSignInPage
-      - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-global-header
-        disabled: false
-        pluginConfig:
-          app:
-            sidebar:
-              search: false
-          dynamicPlugins:
-            frontend:
-              default.main-menu-items:
-                menuItems:
-                  default.create:
-                    title: ''
-                  default.admin:
-                    title: Administration
-                    textKey: menuItem.administration
-                    icon: admin
-              red-hat-developer-hub.backstage-plugin-global-header:
-                mountPoints:
 
-                  - mountPoint: application/header
-                    importName: GlobalHeader
-                    config:
-                      position: above-main-content
-
-                  - mountPoint: global.header/component
-                    importName: SearchComponent
-                    config:
-                      priority: 110
-
-                  - mountPoint: global.header/component
-                    importName: Spacer
-                    config:
-                      priority: 100
-                      props:
-                        growFactor: 1
-
-                  - mountPoint: global.header/component
-                    importName: HeaderIconButton
-                    config:
-                      priority: 90
-                      props:
-                        title: Create...
-                        icon: add
-                        to: create
-
-                  - mountPoint: global.header/component
-                    importName: StarredDropdown
-                    config:
-                      priority: 85
-
-                  - mountPoint: global.header/component
-                    importName: ApplicationLauncherDropdown
-                    config:
-                      priority: 80
-
-                  - mountPoint: global.header/component
-                    importName: HelpDropdown
-                    config:
-                      priority: 70
-
-                  - mountPoint: global.header/help
-                    importName: SupportButton
-                    config:
-                      priority: 10
-
-                  - mountPoint: global.header/component
-                    importName: NotificationButton
-                    config:
-                      priority: 60
-
-                  - mountPoint: global.header/component
-                    importName: Divider
-                    config:
-                      priority: 50
-
-                  - mountPoint: global.header/component
-                    importName: ProfileDropdown
-                    config:
-                      priority: 10
-
-                  # Application Launcher - Documentation Section
-                  - mountPoint: global.header/application-launcher
-                    importName: MenuItemLink
-                    config:
-                      section: Documentation
-                      priority: 300
-                      props:
-                        title: Developer Hub
-                        icon: https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg
-                        link: https://docs.redhat.com/en/documentation/red_hat_developer_hub
-
-                  - mountPoint: global.header/application-launcher
-                    importName: MenuItemLink
-                    config:
-                      section: Documentation
-                      priority: 290
-                      props:
-                        title: Openshift AI Docs
-                        icon: https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg
-                        link: https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed
-
-                  - mountPoint: global.header/application-launcher
-                    importName: MenuItemLink
-                    config:
-                      section: Developer Tools
-                      priority: 200
-                      props:
-                        title: RHDH Local
-                        icon: https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg
-                        link: https://github.com/redhat-developer/rhdh-local
-
-                  - mountPoint: global.header/application-launcher
-                    importName: MenuItemLink
-                    config:
-                      section: Developer Tools
-                      priority: 190
-                      props:
-                        title: RHDH Dynamic Plugin Factory
-                        icon: https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg
-                        link: https://github.com/redhat-developer/rhdh-plugins
-
-                  - mountPoint: global.header/application-launcher
-                    importName: MenuItemLink
-                    config:
-                      section: Developer Tools
-                      priority: 180
-                      props:
-                        title: RHDH CLI
-                        icon: https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg
-                        link: https://github.com/redhat-developer/rhdh-cli
-
-                  - mountPoint: global.header/application-launcher
-                    importName: MenuItemLink
-                    config:
-                      section: Quick Links
-                      priority: 150
-                      props:
-                        title: MCP Tools Guide
-                        icon: https://upload.wikimedia.org/wikipedia/commons/0/01/Google_Docs_logo_%282014-2020%29.svg
-                        link: https://docs.google.com/document/d/1o9qRYCAszGzTwW2mRjC4c9wFwJIx8J3XF1kGPFy5F1s/edit?tab=t.0
-
-                  - mountPoint: global.header/application-launcher
-                    importName: MenuItemLink
-                    config:
-                      section: Quick Links
-                      priority: 140
-                      props:
-                        title: Openshift AI
-                        icon: https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg
-                        link: https://rhods-dashboard-redhat-ods-applications.apps.rosa.redhat-ai-dev.m6no.p3.openshiftapps.com/
-
-
-                  # Support Menu (visible in Support dropdown)
-                  - mountPoint: global.header/support
-                    importName: MenuItemLink
-                    config:
-                      priority: 100
-                      props:
-                        title: Quickstart
-                        link: /quickstart
-                        icon: help
-
-                  # Profile Menu (visible in Profile dropdown)
-                  # Items: Settings, Logout
-                  - mountPoint: global.header/profile
-                    importName: MenuItemLink
-                    config:
-                      priority: 100
-                      props:
-                        title: Settings
-                        link: /settings
-                        icon: manageAccounts
-
-                  - mountPoint: global.header/profile
-                    importName: LogoutButton
-                    config:
-                      priority: 10
-
-      - package: ./dynamic-plugins/dist/backstage-plugin-kubernetes-backend-dynamic
-        disabled: false
-      - package: ./dynamic-plugins/dist/backstage-plugin-kubernetes
-        disabled: false
-      - package:  ./dynamic-plugins/dist/backstage-community-plugin-catalog-backend-module-keycloak-dynamic
-        disabled: false
-      - package: ./dynamic-plugins/dist/backstage-community-plugin-redhat-argocd
-        disabled: false
+      ##### Red Hat Plugins without wrappers #####
+      # Plugins for ArgoCD integration
+      - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-argocd:bs_1.45.3__2.4.4
         pluginConfig:
           dynamicPlugins:
             frontend:
@@ -222,30 +39,14 @@ global:
                       if:
                         allOf:
                           - isArgocdConfigured
-      - disabled: false
-        package: ./dynamic-plugins/dist/roadiehq-backstage-plugin-argo-cd-backend-dynamic
-      - disabled: false
-        package: ./dynamic-plugins/dist/roadiehq-scaffolder-backend-argocd-dynamic
-      - disabled: false
-        package: ./dynamic-plugins/dist/backstage-plugin-techdocs-backend-dynamic
-      - disabled: false
-        package: ./dynamic-plugins/dist/backstage-plugin-techdocs
-      - disabled: false
-        package: ./dynamic-plugins/dist/backstage-community-plugin-topology
-      - disabled: false
-        package: ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-github-dynamic
-      - disabled: false
-        package: ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-github-org-dynamic    
-      - disabled: false
-        package: ./dynamic-plugins/dist/backstage-plugin-scaffolder-backend-module-github-dynamic
-      - disabled: false
-        package: ./dynamic-plugins/dist/backstage-plugin-scaffolder-backend-module-gitlab-dynamic
-      - disabled: false
-        package: ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-gitlab-dynamic
-      - disabled: false
-        package: ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-gitlab-org-dynamic
-      - disabled: false
-        package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed:bs_1.45.3__1.1.1!red-hat-developer-hub-backstage-plugin-lightspeed
+      - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/roadiehq-backstage-plugin-argo-cd-backend:bs_1.45.3__4.4.2
+        disabled: false
+      - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/roadiehq-scaffolder-backend-argocd:bs_1.45.3__1.8.1
+        disabled: false
+
+      # Lightspeed Plugins
+      - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed:bs_1.45.3__1.2.2
+        disabled: false
         pluginConfig:
           dynamicPlugins:
             frontend:
@@ -265,22 +66,27 @@ global:
                     menuItem:
                       icon: LightspeedIcon
                       text: Lightspeed
-      - disabled: false
-        package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed-backend:bs_1.45.3__1.1.1!red-hat-developer-hub-backstage-plugin-lightspeed-backend
-      - disabled: false
-        package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-plugin-mcp-actions-backend:bs_1.45.3__0.1.5!backstage-plugin-mcp-actions-backend
-      - disabled: false
-        package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-software-catalog-mcp-tool:bs_1.45.3__0.4.1!red-hat-developer-hub-backstage-plugin-software-catalog-mcp-tool
-      - disabled: false
-        package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-techdocs-mcp-tool:bs_1.45.3__0.3.2!red-hat-developer-hub-backstage-plugin-techdocs-mcp-tool
-      - disabled: true
-        package: ./dynamic-plugins/dist/backstage-community-plugin-analytics-provider-segment
-      - disabled: false
-        package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-catalog-backend-module-model-catalog:bs_1.45.3__0.9.0!red-hat-developer-hub-backstage-plugin-catalog-backend-module-model-catalog
-      - disabled: false
-        package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-catalog-techdoc-url-reader-backend:bs_1.45.3__0.5.0!red-hat-developer-hub-backstage-plugin-catalog-techdoc-url-reader-backend
-      - disabled: false
-        package: ./dynamic-plugins/dist/backstage-community-plugin-tekton
+      - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed-backend:bs_1.45.3__1.2.2
+        disabled: false
+
+      # MCP Actions plugins
+      - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-plugin-mcp-actions-backend:bs_1.45.3__0.1.5
+        disabled: false
+      - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-software-catalog-mcp-tool:bs_1.45.3__0.4.1
+        disabled: false
+      - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-techdocs-mcp-tool:bs_1.45.3__0.3.2
+        disabled: false
+
+      # Model Catalog Plugins
+      - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-catalog-backend-module-model-catalog:bs_1.45.3__0.9.0
+        disabled: false
+      - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-catalog-techdoc-url-reader-backend:bs_1.45.3__0.5.0
+        disabled: false
+
+      # Tekton Pipelines Plugins
+      # Tekton CI Plugins
+      - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-tekton:bs_1.45.3__3.33.3
+        disabled: false
         pluginConfig:
           dynamicPlugins:
             frontend:
@@ -296,6 +102,221 @@ global:
                     importName: TektonCI
                     mountPoint: entity.page.ci/cards
 
+      # Quay Plugins
+      - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-scaffolder-backend-module-quay:bs_1.45.3__2.14.0
+        disabled: false
+
+      ##### Default Backstage Dynamic Plugins #####
+      # Plugin for global header customization
+      # We follow the default plugins setup with a slight diff
+      # on the application-launcher dropdown items
+      - package: ./dynamic-plugins/dist/red-hat-developer-hub-backstage-plugin-global-header
+        disabled: false
+        pluginConfig:
+          app:
+            sidebar:
+              search: false
+              settings: false
+              logo: false
+          dynamicPlugins:
+            frontend:
+              default.main-menu-items:
+                menuItems:
+                  default.create:
+                    title: ''
+                  default.admin:
+                    title: Administration
+                    textKey: menuItem.administration
+                    icon: admin
+              red-hat-developer-hub.backstage-plugin-global-header:
+                translationResources:
+                - importName: globalHeaderTranslations
+                  ref: globalHeaderTranslationRef
+                mountPoints:
+                - mountPoint: application/header
+                  importName: GlobalHeader
+                  config:
+                    position: above-sidebar
+                - mountPoint: global.header/component
+                  importName: CompanyLogo
+                  config:
+                    priority: 200
+                    props:
+                      to: /
+                - mountPoint: global.header/component
+                  importName: SearchComponent
+                  config:
+                    priority: 100
+                - mountPoint: global.header/component
+                  importName: Spacer
+                  config:
+                    priority: 99
+                    props:
+                      growFactor: 0
+                - mountPoint: global.header/component
+                  importName: HeaderIconButton
+                  config:
+                    priority: 90
+                    props:
+                      title: Self-service
+                      titleKey: create.title
+                      icon: add
+                      to: create
+                - mountPoint: global.header/component
+                  importName: StarredDropdown
+                  config:
+                    priority: 85
+                - mountPoint: global.header/component
+                  importName: ApplicationLauncherDropdown
+                  config:
+                    priority: 82
+                - mountPoint: global.header/application-launcher
+                  importName: MenuItemLink
+                  config:
+                    section: Documentation
+                    priority: 300
+                    props:
+                      title: Developer Hub
+                      icon: https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg
+                      link: https://docs.redhat.com/en/documentation/red_hat_developer_hub
+
+                - mountPoint: global.header/application-launcher
+                  importName: MenuItemLink
+                  config:
+                    section: Documentation
+                    priority: 290
+                    props:
+                      title: Openshift AI Docs
+                      icon: https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg
+                      link: https://docs.redhat.com/en/documentation/red_hat_openshift_ai_self-managed
+
+                - mountPoint: global.header/application-launcher
+                  importName: MenuItemLink
+                  config:
+                    section: Developer Tools
+                    priority: 200
+                    props:
+                      title: RHDH Local
+                      icon: https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg
+                      link: https://github.com/redhat-developer/rhdh-local
+
+                - mountPoint: global.header/application-launcher
+                  importName: MenuItemLink
+                  config:
+                    section: Developer Tools
+                    priority: 190
+                    props:
+                      title: RHDH Dynamic Plugin Factory
+                      icon: https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg
+                      link: https://github.com/redhat-developer/rhdh-plugins
+
+                - mountPoint: global.header/application-launcher
+                  importName: MenuItemLink
+                  config:
+                    section: Developer Tools
+                    priority: 180
+                    props:
+                      title: RHDH CLI
+                      icon: https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg
+                      link: https://github.com/redhat-developer/rhdh-cli
+
+                - mountPoint: global.header/application-launcher
+                  importName: MenuItemLink
+                  config:
+                    section: Quick Links
+                    priority: 150
+                    props:
+                      title: MCP Tools Guide
+                      icon: https://upload.wikimedia.org/wikipedia/commons/0/01/Google_Docs_logo_%282014-2020%29.svg
+                      link: https://docs.google.com/document/d/1o9qRYCAszGzTwW2mRjC4c9wFwJIx8J3XF1kGPFy5F1s/edit?tab=t.0
+
+                - mountPoint: global.header/application-launcher
+                  importName: MenuItemLink
+                  config:
+                    section: Quick Links
+                    priority: 140
+                    props:
+                      title: Openshift AI
+                      icon: https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg
+                      link: https://rhods-dashboard-redhat-ods-applications.apps.rosa.redhat-ai-dev.m6no.p3.openshiftapps.com/
+                
+                - mountPoint: global.header/component
+                  importName: HelpDropdown
+                  config:
+                    priority: 80
+                - mountPoint: global.header/help
+                  importName: SupportButton
+                  config:
+                    priority: 10
+                - mountPoint: global.header/component
+                  importName: NotificationButton
+                  config:
+                    priority: 70
+                - mountPoint: global.header/component
+                  importName: Divider
+                  config:
+                    priority: 50
+                - mountPoint: global.header/component
+                  importName: ProfileDropdown
+                  config:
+                    priority: 10
+                - mountPoint: global.header/profile
+                  importName: MenuItemLink
+                  config:
+                    priority: 100
+                    props:
+                      title: Settings
+                      titleKey: profile.settings
+                      link: /settings
+                      icon: manageAccounts
+                - mountPoint: global.header/profile
+                  importName: MenuItemLink
+                  config:
+                    priority: 90
+                    props:
+                      title: My profile
+                      titleKey: profile.myProfile
+                      type: myProfile
+                      icon: account
+                - mountPoint: global.header/profile
+                  importName: LogoutButton
+                  config:
+                    priority: 10
+
+      # Plugins for Kubernetes integration
+      - package: ./dynamic-plugins/dist/backstage-plugin-kubernetes-backend-dynamic
+        disabled: false
+      - package: ./dynamic-plugins/dist/backstage-plugin-kubernetes
+        disabled: false
+      - package: ./dynamic-plugins/dist/backstage-community-plugin-topology
+        disabled: false
+
+      # Catalog plugins
+      - package: ./dynamic-plugins/dist/backstage-community-plugin-catalog-backend-module-keycloak-dynamic
+        disabled: false
+
+      # TechDocs plugins
+      - package: ./dynamic-plugins/dist/backstage-plugin-techdocs-backend-dynamic
+        disabled: false        
+      - package: ./dynamic-plugins/dist/backstage-plugin-techdocs
+        disabled: false
+
+      # Gitlab Plugins
+      - package: ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-github-dynamic
+        disabled: false
+      - package: ./dynamic-plugins/dist/backstage-plugin-scaffolder-backend-module-gitlab-dynamic
+        disabled: false
+      - package: ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-gitlab-dynamic
+        disabled: false
+      - package: ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-gitlab-org-dynamic
+        disabled: false
+        
+      # Github Plugins
+      - package: ./dynamic-plugins/dist/backstage-plugin-catalog-backend-module-github-org-dynamic
+        disabled: false
+      - package: ./dynamic-plugins/dist/backstage-plugin-scaffolder-backend-module-github-dynamic
+        disabled: false
+
   clusterRouterBase: apps.rosa.redhat-ai-dev.m6no.p3.openshiftapps.com
   host: ""
   auth:
@@ -303,13 +324,19 @@ global:
       enabled: true
       existingSecret: ""
       value: ""
+
 backstage:
+  # override the default name to stay in the context
+  # of the same deployment resource (e.g. rolling-demo-backstage)
+  # where the latest rhdh-chart introduces rolling-demo-developer-hub
+  nameOverride: backstage
   upstream:
+    nameOverride: backstage
     backstage:
       image:
         registry: quay.io
         repository: rhdh/rhdh-hub-rhel9
-        tag: "1.8-190"
+        tag: "1.9-174"
         pullSecrets:
           - quay-pull-secret
       command: []
@@ -371,7 +398,6 @@ backstage:
               user: postgres
           cors:
             origin: "${RHDH_BASE_URL}"
-          # AI Experience config
           csp:
             upgrade-insecure-requests: false
             img-src:
@@ -557,6 +583,9 @@ backstage:
       extraVolumeMounts:
         - name: dynamic-plugins-root
           mountPath: /opt/app-root/src/dynamic-plugins-root
+        # tmp backstage volume for scaffolder tasks
+        - name: backstage-tmp
+          mountPath: /tmp
       extraVolumes:
         - name: dynamic-plugins-root
           ephemeral:
@@ -580,6 +609,9 @@ backstage:
         - name: lightspeed-stack
           configMap:
             name: lightspeed-stack
+        # tmp backstage volume for scaffolder tasks
+        - name: backstage-tmp
+          emptyDir: {}
         - name: shared-storage
           emptyDir: {}
         - name: rag-data-volume
