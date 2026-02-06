@@ -251,6 +251,15 @@ install_deps() {
 
 # run_rhoai_setup: applies the ODH Kubeflow Model Registry kustomize and waits for the job
 run_rhoai_setup() {
+  # Skip if the job already completed (e.g. on a re-run after failure)
+  local job_status
+  job_status=$(oc get job "$ODH_JOB_NAME" -n "$ODH_JOB_NAMESPACE" \
+    -o jsonpath='{.status.conditions[?(@.type=="Complete")].status}' 2>/dev/null)
+  if [[ "$job_status" == "True" ]]; then
+    log "Job '$ODH_JOB_NAME' already completed. Skipping."
+    return 0
+  fi
+
   log "Applying kustomize from $ODH_SETUP_DIR/kustomize-rhoai..."
   cd "$ODH_SETUP_DIR"
   if ! oc apply -k "./kustomize-rhoai" >/dev/null 2>&1; then
@@ -260,7 +269,7 @@ run_rhoai_setup() {
   fi
   log "Waiting for job '$ODH_JOB_NAME' to complete (this may take a while)..."
   if ! oc wait --for=condition=complete job/"$ODH_JOB_NAME" \
-    -n "$ODH_JOB_NAMESPACE" --timeout=1800s >/dev/null 2>&1; then
+    -n "$ODH_JOB_NAMESPACE" --timeout=3600s >/dev/null 2>&1; then
     log "Job '$ODH_JOB_NAME' did not complete in time."
     log_fail
     exit 1
