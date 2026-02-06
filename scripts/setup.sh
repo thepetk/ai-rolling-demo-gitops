@@ -101,6 +101,24 @@ wait_for_csv() {
   exit 1
 }
 
+# update_starting_csv: fetches the latest CSV for a package from the catalog and updates the subscription YAML
+update_starting_csv() {
+  local package="$1"
+  local channel="$2"
+  local sub_yaml="$3"
+
+  log "Fetching latest CSV for '$package' from channel '$channel'..."
+  local latest_csv
+  latest_csv=$(oc get packagemanifest "$package" -n openshift-marketplace \
+    -o jsonpath="{.status.channels[?(@.name==\"$channel\")].currentCSV}" 2>/dev/null)
+  if [[ -z "$latest_csv" ]]; then
+    log "Failed to fetch latest CSV for '$package'. Continuing with existing startingCSV."
+    return 1
+  fi
+  log "Latest CSV for '$package': $latest_csv"
+  yq eval ".spec.startingCSV = \"$latest_csv\"" -i "$DEPS_DIR/$sub_yaml"
+}
+
 # install_cluster_scoped_operator: installs an operator via a YAML file in deps/
 install_cluster_scoped_operator() {
   local namespace="$1"
@@ -229,6 +247,7 @@ install_deps() {
     log "Node Feature Discovery Operator already installed. Skipping."
   else
     log "Node Feature Discovery Operator not found. Installing..."
+    update_starting_csv "$NFD_OPERATOR_PACKAGE" "stable" "nfd-subscription.yaml"
     install_namespaced_operator "$NFD_OPERATOR_NAMESPACE" "nfd-operator-group.yaml" "nfd-subscription.yaml" "$NFD_OPERATOR_PACKAGE"
     wait_for_csv "$NFD_OPERATOR_NAMESPACE" "$NFD_OPERATOR_PACKAGE"
     # Create NFD instance
