@@ -70,6 +70,8 @@ global:
                       priority: 100
       - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed-backend:bs_1.45.3__1.2.2
         disabled: false
+      - package: oci://quay.io/tpetkos/lightspeed-screen-context:v0.1.0
+        disabled: false
 
       # MCP Actions plugins
       - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-plugin-mcp-actions-backend:bs_1.45.3__0.1.5
