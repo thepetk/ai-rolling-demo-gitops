@@ -357,6 +357,8 @@ backstage:
         extensions:
           installation:
             enabled: true
+            saveToSingleFile:
+              file: /opt/app-root/src/dynamic-plugins.yaml
         auth:
           environment: production
           session:
