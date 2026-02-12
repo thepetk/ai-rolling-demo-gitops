@@ -4,15 +4,27 @@ global:
       - "dynamic-plugins.default.yaml"
     plugins:
       ##### Custom sign in page plugin #####
-      - package: oci://quay.io/tpetkos/customized-sign-in-page:v0.1.0
+      - package: oci://quay.io/tpetkos/backstage-plugin-rhdh-customized-sign-in-page:v0.2.0
         disabled: false
         pluginConfig:
-           dynamicPlugins:
-             frontend:
-              red-hat-developer-hub.backstage-plugin-customized-sign-in-page:
+          dynamicPlugins:
+            frontend:
+              red-hat-developer-hub.backstage-plugin-rhdh-customized-sign-in-page:
                 signInPage:
                   importName: CustomizedSignInPage
-
+          app:
+            signInPage:
+              warning:
+                title: "Red Hat SSO Login Help"
+                message: "⚠️ Note: If this is your first time logging in the rolling demo environment, you may see the error 'Failed to sign-in, unable to resolve user identity. Please verify that your catalog contains the expected User entities that would match your configured sign-in resolver'. Please wait a few minutes and try again since it will take some time for the registration to complete."
+                severity: info
+                links:
+                  - title: "Report an issue"
+                    url: "https://github.com/redhat-ai-dev/ai-rolling-demo-gitops/issues"
+              providers:
+                  - id: oidc
+                    title: Red Hat SSO
+                    message: Sign in using Red Hat SSO
       ##### Red Hat Plugins without wrappers #####
       # Plugins for ArgoCD integration
       - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-argocd:bs_1.45.3__2.4.4
