@@ -354,6 +354,9 @@ backstage:
               flushInterval: 5000
               debug: false
               licensedUsers: 50
+        extensions:
+          installation:
+            enabled: true
         auth:
           environment: production
           session:
