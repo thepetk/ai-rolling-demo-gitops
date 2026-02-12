@@ -4,27 +4,14 @@ global:
       - "dynamic-plugins.default.yaml"
     plugins:
       ##### Custom sign in page plugin #####
-      - package: oci://quay.io/tpetkos/backstage-plugin-rhdh-customized-sign-in-page:v0.1.9
+      - package: oci://quay.io/tpetkos/customized-sign-in-page:v0.1.0
         disabled: false
         pluginConfig:
-          dynamicPlugins:
-            frontend:
-              red-hat-developer-hub.backstage-plugin-rhdh-customized-sign-in-page:
+           dynamicPlugins:
+             frontend:
+              red-hat-developer-hub.backstage-plugin-customized-sign-in-page:
                 signInPage:
-                  importName: RHDHCustomizedSignInPage
-          app:
-            signInPage:
-              warning:
-                title: "Red Hat SSO Login Help"
-                message: "⚠️ Note: If this is your first time logging in the rolling demo environment, you may see the error 'Failed to sign-in, unable to resolve user identity. Please verify that your catalog contains the expected User entities that would match your configured sign-in resolver'. Please wait a few minutes and try again since it will take some time for the registration to complete."
-                severity: info
-                links:
-                  - title: "Report an issue"
-                    url: "https://github.com/redhat-ai-dev/ai-rolling-demo-gitops/issues"
-              providers:
-                - id: oidc
-                  title: Red Hat SSO
-                  message: Sign in using Red Hat SSO
+                  importName: CustomizedSignInPage
 
       ##### Red Hat Plugins without wrappers #####
       # Plugins for ArgoCD integration
@@ -603,6 +590,8 @@ backstage:
         # tmp backstage volume for scaffolder tasks
         - name: backstage-tmp
           mountPath: /tmp
+        - name: extensions-catalog
+          mountPath: /extensions
       extraVolumes:
         - name: dynamic-plugins-root
           ephemeral:
@@ -633,6 +622,8 @@ backstage:
           emptyDir: {}
         - name: rag-data-volume
           emptyDir: {}
+        - name: extensions-catalog
+          emptyDir: {}
       initContainers:
         - name: install-dynamic-plugins
           image: '{{ include "backstage.image" . }}'
@@ -654,6 +645,8 @@ backstage:
               name: dynamic-plugins-npmrc
               readOnly: true
               subPath: .npmrc
+            - mountPath: /extensions
+              name: extensions-catalog
         - name: init-rag-data
           image: 'quay.io/redhat-ai-dev/rag-content:release-1.7-lcs'
           command:
