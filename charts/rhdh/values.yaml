@@ -4,7 +4,7 @@ global:
       - "dynamic-plugins.default.yaml"
     plugins:
       ##### Custom sign in page plugin #####
-      - package: oci://quay.io/tpetkos/backstage-plugin-rhdh-customized-sign-in-page:v0.1.0
+      - package: oci://quay.io/tpetkos/backstage-plugin-rhdh-customized-sign-in-page:v0.1.3
         disabled: false
         pluginConfig:
           dynamicPlugins:
