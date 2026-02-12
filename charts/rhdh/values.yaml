@@ -122,6 +122,10 @@ global:
       - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-scaffolder-backend-module-quay:bs_1.45.3__2.14.0
         disabled: true
 
+      # ServiceNow Plugin (disabled - image not accessible)
+      - package: oci://registry.access.redhat.com/rhdh/backstage-community-plugin-scaffolder-backend-module-servicenow@sha256:3ff2122f96463ec0a9c4cfee71e4be0333b8cd82e086c9433c8c9c3a45ac3eb5
+        disabled: true
+
       ##### Default Backstage Dynamic Plugins #####
       # Plugin for global header customization
       # We follow the default plugins setup with a slight diff
