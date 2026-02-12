@@ -16,7 +16,7 @@ global:
             signInPage:
               warning:
                 title: "Red Hat SSO Login Help"
-                message: "For new users trying to login with Red Hat SSO and receive a failure, please try once again in a few minutes to wait for the user catalog to be updated."
+                message: "⚠️ Note: If this is your first time logging in the rolling demo environment, you may see the error 'Failed to sign-in, unable to resolve user identity. Please verify that your catalog contains the expected User entities that would match your configured sign-in resolver'. Please wait a few minutes and try again since it will take some time for the registration to complete."
                 severity: info
                 links:
                   - title: "Report an issue"
