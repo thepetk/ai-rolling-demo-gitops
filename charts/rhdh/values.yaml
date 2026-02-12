@@ -4,7 +4,7 @@ global:
       - "dynamic-plugins.default.yaml"
     plugins:
       ##### Custom sign in page plugin #####
-      - package: oci://quay.io/tpetkos/backstage-plugin-rhdh-customized-sign-in-page:v0.1.6
+      - package: oci://quay.io/tpetkos/backstage-plugin-rhdh-customized-sign-in-page:v0.1.7
         disabled: false
         pluginConfig:
           dynamicPlugins:
@@ -58,7 +58,7 @@ global:
         disabled: false
 
       # Lightspeed Plugins
-      - package: oci://quay.io/tpetkos/lightspeed:v0.1.0!red-hat-developer-hub-backstage-plugin-lightspeed
+      - package: oci://quay.io/tpetkos/lightspeed:v0.1.0
         disabled: false
         pluginConfig:
           dynamicPlugins:
@@ -81,7 +81,7 @@ global:
                     config:
                       id: lightspeed
                       priority: 100
-      - package: oci://quay.io/tpetkos/lightspeed-backend:v0.1.0!red-hat-developer-hub-backstage-plugin-lightspeed-backend
+      - package: oci://quay.io/tpetkos/lightspeed-backend:v0.1.0
         disabled: false
       - package: oci://quay.io/tpetkos/lightspeed-screen-context:v0.1.0
         disabled: false
