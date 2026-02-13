@@ -11,7 +11,7 @@ global:
             frontend:
               red-hat-developer-hub.backstage-plugin-rhdh-customized-sign-in-page:
                 signInPage:
-                  importName: CustomizedSignInPage
+                  importName: RHDHCustomizedSignInPage
           app:
             signInPage:
               warning:
