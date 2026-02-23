@@ -45,7 +45,7 @@ global:
         disabled: false
 
       # Lightspeed Plugins
-      - package: oci://quay.io/tpetkos/lightspeed:v0.1.6
+      - package: oci://quay.io/tpetkos/lightspeed:v0.1.7
         disabled: false
         pluginConfig:
           dynamicPlugins:
@@ -68,9 +68,9 @@ global:
                     config:
                       id: lightspeed
                       priority: 100
-      - package: oci://quay.io/tpetkos/lightspeed-backend:v0.1.6
+      - package: oci://quay.io/tpetkos/lightspeed-backend:v0.1.7
         disabled: false
-      - package: oci://quay.io/tpetkos/lightspeed-screen-context:v0.1.6
+      - package: oci://quay.io/tpetkos/lightspeed-screen-context:v0.1.7
         disabled: false
 
       # MCP Actions plugins
