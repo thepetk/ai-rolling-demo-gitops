@@ -4,14 +4,14 @@ global:
       - "dynamic-plugins.default.yaml"
     plugins:
       ##### Custom sign in page plugin #####
-      - package: oci://quay.io/tpetkos/customized-sign-in-page:v0.1.0
+      - package: oci://quay.io/redhat-ai-dev/rolling-demo-customized-sign-in-page:v0.1.1
         disabled: false
         pluginConfig:
           dynamicPlugins:
             frontend:
-              red-hat-developer-hub.backstage-plugin-customized-sign-in-page:
+              red-hat-developer-hub.backstage-plugin-rolling-demo-customized-sign-in-page:
                 signInPage:
-                  importName: CustomizedSignInPage
+                  importName: RollingDemoCustomizedSignInPage
 
       ##### Red Hat Plugins without wrappers #####
       # Plugins for ArgoCD integration
