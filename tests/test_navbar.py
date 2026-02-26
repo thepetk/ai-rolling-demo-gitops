@@ -15,17 +15,13 @@ def navbar(authenticated_page: "Page", base_url: "str") -> "NavBar":
 
 @pytest.mark.auth_required
 def test_rhdh_logo_visible(navbar: "NavBar") -> "None":
-    assert (
-        navbar.rhdh_logo.is_visible(),
-        "RHDH logo should be visible in the nav bar"
-    )
+    assert navbar.rhdh_logo.is_visible(), "RHDH logo should be visible in the nav bar"
+
 
 @pytest.mark.auth_required
 def test_search_input_visible(navbar: "NavBar") -> "None":
-    assert (
-        navbar.search_input.is_visible(),
-        "Search input should be visible in the nav bar"
-    )
+    assert navbar.search_input.is_visible(), "Search input should be visible in the nav bar"
+
 
 @pytest.mark.auth_required
 def test_search_input_placeholder(navbar: "NavBar") -> "None":
@@ -44,10 +40,8 @@ def test_self_service_icon_visible(navbar: "NavBar") -> "None":
 
 @pytest.mark.auth_required
 def test_app_launcher_button_visible(navbar: "NavBar") -> "None":
-    assert (
-        navbar.app_launcher_button.is_visible(),
-        "App launcher button should be visible"
-    )
+    assert navbar.app_launcher_button.is_visible(), "App launcher button should be visible"
+
 
 @pytest.mark.auth_required
 @pytest.mark.parametrize("item_label", APP_LAUNCHER_ITEMS)
@@ -56,10 +50,8 @@ def test_app_launcher_contains_item(
 ) -> "None":
     navbar.open_app_launcher()
     item = navbar.app_launcher_item(item_label)
-    assert (
-        item.is_visible(),
-        f"App launcher should contain item '{item_label}'"
-    )
+    assert item.is_visible(), f"App launcher should contain item '{item_label}'"
+
 
 @pytest.mark.auth_required
 def test_help_icon_visible(navbar: "NavBar") -> "None":

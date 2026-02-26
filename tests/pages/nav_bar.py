@@ -38,9 +38,7 @@ class NavBar(BasePage):
         retrieves the Red Hat Developer Hub logo in the top-left
         of the nav bar.
         """
-        return self.page.locator(
-            "header img[alt*='Red Hat'], header svg[title*='Red Hat'], a[href='/'] img"
-        ).first
+        return self.page.locator("a[aria-label='Home']")
 
     @property
     def search_input(self) -> "Locator":
@@ -54,9 +52,7 @@ class NavBar(BasePage):
         """
         locates the Self-service icon button (tooltip: 'self-service').
         """
-        return self.page.locator(
-            "[aria-label='self-service'], [title='self-service']"
-        )
+        return self.page.locator("[aria-label='Self-service']")
 
     @property
     def app_launcher_button(self) -> "Locator":
@@ -64,11 +60,7 @@ class NavBar(BasePage):
         locates the Application launcher (grid/waffle) icon that opens
         the dropdown.
         """
-        return self.page.locator(
-            "[aria-label='Application launcher'], "
-            "[data-testid='application-launcher'], "
-            "button[id*='application-launcher']"
-        ).first
+        return self.page.locator("button[aria-label='Application launcher']")
 
     def open_app_launcher(self) -> "None":
         """
