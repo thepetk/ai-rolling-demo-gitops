@@ -38,7 +38,7 @@ class NavBar(BasePage):
         retrieves the Red Hat Developer Hub logo in the top-left
         of the nav bar.
         """
-        return self.page.locator("a[aria-label='Home']")
+        return self.page.locator("[data-testid='global-header-company-logo'] a[aria-label='Home']")
 
     @property
     def search_input(self) -> "Locator":
@@ -52,7 +52,7 @@ class NavBar(BasePage):
         """
         locates the Self-service icon button (tooltip: 'self-service').
         """
-        return self.page.locator("[aria-label='Self-service']")
+        return self.page.locator("a[aria-label='Self-service']")
 
     @property
     def app_launcher_button(self) -> "Locator":
@@ -68,18 +68,38 @@ class NavBar(BasePage):
         the app launcher button and waiting for the dropdown menu
         to be visible.
         """
-        self.app_launcher_button.click()
-        self.page.wait_for_selector(
-            "[aria-label='Application launcher'] + ul, [id*='app-launcher-menu']",
-            state="visible"
-        )
+        # close any leftover open menu before clicking
+        self.page.keyboard.press("Escape")
+
+        btn = self.app_launcher_button
+        btn.wait_for(state="visible")
+        btn.click()
+
+        # MUI sets aria-labelledby=<button id> on the menu — use that to
+        # pick the correct ul[role='menu'] out of potentially many in the DOM
+        btn_id = btn.get_attribute("id")
+        if btn_id:
+            menu = self.page.locator(f"ul[role='menu'][aria-labelledby='{btn_id}']")
+        else:
+            menu = self.page.locator("ul[role='menu']").filter(
+                has=self.page.locator(":visible")
+            ).first
+
+        menu.wait_for(state="visible", timeout=10000)
 
     def app_launcher_item(self, label: "str") -> "Locator":
         """
         locates an item in the application launcher dropdown
         menu by its label.
         """
-        return self.page.locator(f"text={label}").first
+        btn_id = self.app_launcher_button.get_attribute("id")
+        if btn_id:
+            menu = self.page.locator(f"ul[role='menu'][aria-labelledby='{btn_id}']")
+        else:
+            menu = self.page.locator("ul[role='menu']").filter(
+                has=self.page.locator(":visible")
+            ).first
+        return menu.locator(f"a[role='menuitem']:has(p:text-is('{label}'))")
 
     @property
     def help_icon(self) -> "Locator":
