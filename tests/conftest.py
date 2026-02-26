@@ -39,22 +39,53 @@ def authenticated_page(base_url: "str") -> "Page":
     password = _require_env("RH_PASSWORD")
 
     with sync_playwright() as playwright:
-        browser: Browser = playwright.chromium.launch(headless=True)
+        browser: Browser = playwright.chromium.launch(
+            headless=True,
+            args=["--disable-blink-features=AutomationControlled"],
+        )
         context: BrowserContext = browser.new_context(
             ignore_https_errors=True,
+            locale="en-US",
+            timezone_id="UTC",
+            user_agent=(
+                "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+                "(KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36"
+            ),
+        )
+        context.add_init_script(
+            "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
         )
         page: Page = context.new_page()
 
-        # navigate to the app and get a redirect to the SSO login page
+        # navigate to the RHDH login page
         page.goto(base_url, wait_until="networkidle")
 
-        # fill in SSO credentials
-        page.fill("input#username", username)
-        page.fill("input#password", password)
-        page.click("input[type='submit']")
+        # capture the SSO window as a new page in the context
+        with context.expect_page() as page_info:
+            page.click("button:has-text('Sign in')")
 
-        # wait for the RHDH home page to load after redirect
-        page.wait_for_url(f"{base_url}/**", wait_until="networkidle")
+        popup = page_info.value
+
+        # wait for the login form to appear in the SSO window
+        popup.wait_for_load_state("domcontentloaded")
+        popup.locator("#username").wait_for(state="visible", timeout=60000)
+
+        # fill in credentials on the SSO form
+        popup.locator("#username").fill(username)
+        popup.locator("#password").fill(password)
+
+        # submit and wait for the navigation that follows
+        with popup.expect_navigation(wait_until="domcontentloaded"):
+            popup.locator("input#submit").click()
+
+        # some flows close the popup, others keep it open and redirect
+        try:
+            popup.wait_for_event("close", timeout=30000)
+        except Exception:
+            pass
+
+        # wait for the main page to finish loading after authentication
+        page.wait_for_load_state("networkidle")
 
         yield page
 
