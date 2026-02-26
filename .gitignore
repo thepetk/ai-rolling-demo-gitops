@@ -4,3 +4,6 @@
 *private-env
 *cosign.pub
 *argocd.yaml
+
+# ignore pycache dirs
+__pycache__/
