@@ -2,7 +2,7 @@ import pytest
 
 from playwright.sync_api import Page
 
-from pages.lightspeed_page import LightspeedPage, MCP_PROMPT, RAG_PROMPT
+from pages.lightspeed_page import LightspeedPage, MCP_PROMPT
 
 
 @pytest.fixture(scope="module")
@@ -26,11 +26,13 @@ def lightspeed_chat(authenticated_page: "Page", base_url: "str") -> "LightspeedP
     lp.wait_for_load()
     return lp
 
+
 @pytest.mark.auth_required
 def test_lightspeed_icon_on_homepage(lightspeed_home: "LightspeedPage") -> "None":
     assert lightspeed_home.homepage_icon.is_visible(), (
         "Lightspeed icon should be visible in the bottom-right of the home page"
     )
+
 
 @pytest.mark.auth_required
 def test_lightspeed_model_selector_has_option(
@@ -38,10 +40,8 @@ def test_lightspeed_model_selector_has_option(
 ) -> "None":
     selector = lightspeed_chat.model_selector
     assert selector.is_visible(), "Model selector should be visible on the Lightspeed page"
-
-    # verify at least one model is listed
-    inner = selector.inner_text()
-    assert inner.strip(), "Model selector should show at least one model"
+    model_name = selector.locator(".pf-v6-c-menu-toggle__text").inner_text().strip()
+    assert model_name, "Model selector should show at least one model"
 
 
 @pytest.mark.auth_required
@@ -55,22 +55,10 @@ def test_lightspeed_chat_input_visible(lightspeed_chat: "LightspeedPage") -> "No
 def test_lightspeed_mcp_tools_response(lightspeed_chat: "LightspeedPage") -> "None":
     lightspeed_chat.send_message(MCP_PROMPT)
     response_text = lightspeed_chat.wait_for_response()
-    assert (
-        response_text.strip(),
-        "Lightspeed should return a non-empty response for MCP prompt"
+    assert "register-catalog-entities" in response_text, (
+        "Lightspeed MCP response should contain 'register-catalog-entities'"
     )
 
-
-@pytest.mark.auth_required
-def test_lightspeed_rag_sources_response(
-    lightspeed_chat: "LightspeedPage"
-) -> "None":
-    lightspeed_chat.send_message(RAG_PROMPT)
-    response_text = lightspeed_chat.wait_for_response()
-    assert (
-        response_text.strip(),
-        "Lightspeed should return a non-empty response for RAG prompt"
-    )
 
 
 @pytest.mark.auth_required

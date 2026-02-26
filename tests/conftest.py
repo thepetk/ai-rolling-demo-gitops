@@ -91,6 +91,14 @@ def authenticated_page(base_url: "str") -> "Page":
         # wait for the main page to finish loading after authentication
         page.wait_for_load_state("networkidle")
 
+        # close the quickstart guide if it is present
+        try:
+            hide_btn = page.locator("button:text-is('Hide')")
+            hide_btn.wait_for(state="visible", timeout=5000)
+            hide_btn.click()
+        except Exception:
+            pass
+
         yield page
 
         context.close()

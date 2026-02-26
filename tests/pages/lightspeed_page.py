@@ -4,12 +4,12 @@ from .base_page import BasePage
 
 # MCP_PROMPT: should be a prompt that is expected to return a
 # list of available MCP tools when sent to the Lightspeed chat.
-MCP_PROMPT = "List the available MCP tools."
+MCP_PROMPT = "list all the mcp tools you have available"
 
 
 # LLM_RESPONSE_TIMEOUT: the maximum time to wait for a response
 # from the LLM before timing out.
-LLM_RESPONSE_TIMEOUT = 120000 
+LLM_RESPONSE_TIMEOUT = 120000
 
 # DEFAULT_CHAT_ITEM_INDEX: the default index for selecting a
 # chat history item.
@@ -42,24 +42,14 @@ class LightspeedPage(BasePage):
         locates the Model selector dropdown inside the
         Lightspeed chat panel.
         """
-        return self.page.locator(
-            "select[aria-label*='model'], "
-            "[data-testid='model-selector'], "
-            "button[aria-label*='model'], "
-            "[class*='model-selector']"
-        ).first
+        return self.page.locator("button[aria-label='Chatbot selector']")
 
     @property
     def chat_input(self) -> "Locator":
         """
         locates the Text input / textarea for sending prompts.
         """
-        return self.page.locator(
-            "textarea[placeholder*='message'], "
-            "textarea[aria-label*='message'], "
-            "textarea[data-testid*='chat'], "
-            "input[placeholder*='message']"
-        ).first
+        return self.page.locator("textarea[aria-label='Enter a prompt for Lightspeed']")
 
     def send_message(self, text: "str") -> "None":
         """
@@ -72,21 +62,25 @@ class LightspeedPage(BasePage):
     @property
     def response_container(self) -> "Locator":
         """
-        locates the Container element that holds
-        the AI response messages.
+        locates the most recent bot response. Bot messages are
+        distinguished from user messages by having response action
+        buttons (Good/Bad/Copy/Listen) inside them.
         """
         return self.page.locator(
-            "[data-testid='chat-response'], "
-            "[class*='chat-message'], "
-            "[class*='response-container'], "
-            "[aria-live='polite']"
-        ).first
+            "div.pf-chatbot__message-and-actions:has(.pf-chatbot__response-actions)"
+        ).last
 
     def wait_for_response(self, timeout: "int" = LLM_RESPONSE_TIMEOUT) -> "str":
         """
-        waits until a response appears and return its text content.
+        waits until the bot response is fully streamed — indicated by
+        the response action buttons (Good/Bad/Copy) becoming visible —
+        then returns the response text.
         """
-        self.response_container.wait_for(state="visible", timeout=timeout)
+        self.page.locator(
+            "div.pf-chatbot__message-and-actions:has(.pf-chatbot__response-actions)"
+        ).last.locator(".pf-chatbot__response-actions").wait_for(
+            state="visible", timeout=timeout
+        )
         return self.response_container.inner_text()
 
     @property
@@ -102,10 +96,9 @@ class LightspeedPage(BasePage):
 
     def history_item(self, index: "int" = DEFAULT_CHAT_ITEM_INDEX) -> "Locator":
         """
-        returns a chat history entry by index (0-based).
+        returns a chat history entry by index (0-based), excluding
+        disabled placeholder items like "No pinned chats".
         """
         return self.page.locator(
-            "[data-testid='history-item'], "
-            "[class*='history-item'], "
-            "li[class*='history']"
+            "li.pf-chatbot__menu-item:not(.pf-m-disabled)"
         ).nth(index)
