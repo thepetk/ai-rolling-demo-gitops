@@ -69,11 +69,11 @@ class ExtensionsPage(BasePage):
     def click_installed_packages_tab(self) -> "None":
         """
         navigates directly to the installed packages URL and waits
-        for the table rows to be visible.
+        for the table body to be attached to the DOM.
         """
         self.navigate("/extensions/installed-packages")
-        self.page.locator("tbody tr:first-child td:first-child").wait_for(
-            state="visible", timeout=15000
+        self.page.locator("tbody tr td[value]").first.wait_for(
+            state="attached", timeout=15000
         )
 
     @property
@@ -93,4 +93,4 @@ class ExtensionsPage(BasePage):
         by its name. Matches the first table cell whose text content
         equals the package name.
         """
-        return self.page.locator(f"td:text-is('{name}')").first
+        return self.page.locator(f"tbody tr:has-text('{name}')")

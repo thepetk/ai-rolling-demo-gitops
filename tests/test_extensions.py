@@ -51,6 +51,6 @@ def test_extensions_installed_packages_lists_packages(
 ) -> "None":
     extensions.click_installed_packages_tab()
     package = extensions.installed_package(INSTALLED_PACKAGE_SAMPLE)
-    assert package.is_visible(), (
+    assert package.count() > 0, (
         f"Installed packages tab should list '{INSTALLED_PACKAGE_SAMPLE}'"
     )

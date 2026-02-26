@@ -1,4 +1,5 @@
 import os
+import pyotp
 import pytest
 from playwright.sync_api import sync_playwright, Browser, BrowserContext, Page
 
@@ -37,10 +38,13 @@ def authenticated_page(base_url: "str") -> "Page":
     """
     username = _require_env("RH_USERNAME")
     password = _require_env("RH_PASSWORD")
+    otp_secret = _require_env("OTP_SECRET")
+    totp = pyotp.TOTP(otp_secret)
+    full_password = password + totp.now()
 
     with sync_playwright() as playwright:
         browser: Browser = playwright.chromium.launch(
-            headless=True,
+            headless=False,
             args=["--disable-blink-features=AutomationControlled"],
         )
         context: BrowserContext = browser.new_context(
@@ -72,7 +76,7 @@ def authenticated_page(base_url: "str") -> "Page":
 
         # fill in credentials on the SSO form
         popup.locator("#username").fill(username)
-        popup.locator("#password").fill(password)
+        popup.locator("#password").fill(full_password)
 
         # submit and wait for the navigation that follows
         with popup.expect_navigation(wait_until="domcontentloaded"):
