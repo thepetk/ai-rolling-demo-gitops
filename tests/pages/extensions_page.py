@@ -27,14 +27,9 @@ class ExtensionsPage(BasePage):
     @property
     def catalog_tab(self) -> "Locator":
         """
-        the locator for the "catalog" tab. It looks for a button, a tab,
-        or a link that contains the text "catalog".
+        the locator for the "catalog" tab.
         """
-        return self.page.locator(
-            "button:has-text('catalog'), "
-            "[role='tab']:has-text('catalog'), "
-            "a:has-text('catalog')"
-        ).first
+        return self.page.locator("a[role='tab'][data-testid='header-tab-0']")
 
     def click_catalog_tab(self) -> "None":
         """
@@ -62,27 +57,24 @@ class ExtensionsPage(BasePage):
         looks for an element that contains the text matching the provided
         name.
         """
-        return self.page.locator(f"text={name}").first
+        return self.page.locator(f"h6.v5-MuiTypography-subtitle1:text-is('{name}')")
 
     @property
     def installed_packages_tab(self) -> "Locator":
         """
-        retrieves the locator for the "installed packages" tab. It looks for
-        a button, a tab, or a link that contains the text "installed packages".
+        retrieves the locator for the "installed packages" tab.
         """
-        return self.page.locator(
-            "button:has-text('installed packages'), "
-            "[role='tab']:has-text('installed packages'), "
-            "a:has-text('installed packages')"
-        ).first
+        return self.page.locator("a[role='tab'][data-testid='header-tab-1']")
 
     def click_installed_packages_tab(self) -> "None":
         """
-        perfoms a click action on the "installed packages" tab and
-        waits for the page to load.
+        navigates directly to the installed packages URL and waits
+        for the table rows to be visible.
         """
-        self.installed_packages_tab.click()
-        self.page.wait_for_load_state("domcontentloaded")
+        self.navigate("/extensions/installed-packages")
+        self.page.locator("tbody tr:first-child td:first-child").wait_for(
+            state="visible", timeout=15000
+        )
 
     @property
     def installed_packages_list(self) -> "Locator":
@@ -98,7 +90,7 @@ class ExtensionsPage(BasePage):
     def installed_package(self, name: "str") -> "Locator":
         """
         retrieves a specific package from the installed packages list
-        by its name. It looks for an element that contains the text
-        matching the provided name.
+        by its name. Matches the first table cell whose text content
+        equals the package name.
         """
-        return self.page.locator(f"text={name}").first
+        return self.page.locator(f"td:text-is('{name}')").first

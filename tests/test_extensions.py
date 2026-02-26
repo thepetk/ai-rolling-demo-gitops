@@ -23,8 +23,7 @@ def extensions(authenticated_page: "Page", base_url: "str") -> "ExtensionsPage":
 
 @pytest.mark.auth_required
 def test_extensions_catalog_tab_visible(extensions: "ExtensionsPage") -> "None":
-    assert (
-        extensions.catalog_tab.is_visible(), 
+    assert extensions.catalog_tab.is_visible(), (
         "Extensions 'catalog' tab should be visible"
     )
 
