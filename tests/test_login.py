@@ -54,16 +54,12 @@ def test_login_info_banner_text(login_page: "LoginPage") -> "None":
 @pytest.mark.smoke
 def test_sso_panel_heading(login_page: "LoginPage") -> "None":
     heading = login_page.sso_panel_heading
-    assert (
-        heading.is_visible(),
-        f"Expected SSO panel heading '{EXPECTED_SSO_HEADING}' to be visible"
-    )
+    assert heading.is_visible(), f"Expected SSO panel heading '{EXPECTED_SSO_HEADING}' to be visible"
 
 
 @pytest.mark.smoke
 def test_sso_sign_in_text(login_page: "LoginPage") -> "None":
     sign_in = login_page.sso_sign_in_text
-    assert (
-        sign_in.is_visible(),
+    assert sign_in.is_visible(), (
         f"Expected sign-in text '{EXPECTED_SSO_SIGN_IN_TEXT}' to be visible"
     )

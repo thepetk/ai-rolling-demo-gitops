@@ -40,29 +40,25 @@ class LoginPage(BasePage):
         """
         retrieves a top-level info/warning banner shown before authentication.
         """
-        return self.page.locator("[data-testid='login-page-header-banner']").or_(
-            self.page.locator(".pf-v5-c-alert.pf-m-info")
-        ).or_(
-            self.page.locator("[class*='AlertMessage'], [class*='alert--info']")
-        )
+        return self.page.locator(".MuiAlert-message")
 
     @property
     def page_title(self) -> "str":
         """
         retrieves the title of the login page.
         """
-        return self.page.title()
+        return self.page.locator("h1.MuiTypography-h1-30").inner_text()
 
     @property
     def sso_panel_heading(self) -> "Locator":
         """
         retrieves the 'Red Hat SSO' heading inside the sign-in panel.
         """
-        return self.page.locator("text=Red Hat SSO").first
+        return self.page.locator("span.MuiCardHeader-title-203")
 
     @property
     def sso_sign_in_text(self) -> "Locator":
         """
         retrieves the 'Sign in using Red Hat SSO' label.
         """
-        return self.page.locator("text=Sign in using Red Hat SSO").first
+        return self.page.locator("p.MuiTypography-body1-27")
