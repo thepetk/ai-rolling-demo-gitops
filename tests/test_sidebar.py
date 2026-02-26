@@ -1,6 +1,6 @@
 import pytest
 
-from plawright.sync_api import Page
+from playwright.sync_api import Page
 
 from pages.sidebar import Sidebar, MAIN_ITEMS, ADMIN_SUB_ITEMS
 

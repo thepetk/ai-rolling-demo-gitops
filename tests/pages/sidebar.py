@@ -31,10 +31,8 @@ class Sidebar(BasePage):
         locates a sidebar nav item by its visible label.
         """
         return self.page.locator(
-            f"nav a:has-text('{label}'), "
-            f"nav span:has-text('{label}'), "
-            f"[aria-label='{label}']"
-        ).first
+            f"[data-testid='sidebar-root'] a[aria-label='{label}']"
+        )
 
     @property
     def administration_item(self) -> "Locator":
@@ -42,10 +40,8 @@ class Sidebar(BasePage):
         locates the "Administration" section in the sidebar.
         """
         return self.page.locator(
-            "nav a:has-text('Administration'), "
-            "nav button:has-text('Administration'), "
-            "nav span:has-text('Administration')"
-        ).first
+            "[data-testid='sidebar-root'] button[aria-label='Administration']"
+        )
 
     def click_administration(self) -> "None":
         """
@@ -60,4 +56,6 @@ class Sidebar(BasePage):
         locates an Administration sub-item after the section is
         expanded.
         """
-        return self.page.locator(f"text={label}").first
+        return self.page.locator(
+            f"[data-testid='sidebar-root'] a[aria-label='{label}']"
+        )
