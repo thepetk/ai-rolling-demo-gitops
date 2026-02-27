@@ -37,7 +37,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: rhdh-rhoai-bridge-{{ .Release.Namespace }}
+  name: rhdh-rhoai-bridge{{ if .Values.global.isSecondaryInstance }}-{{ .Release.Namespace }}{{ end }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -50,7 +50,7 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: rhdh-rhoai-dashboard-permissions-{{ .Release.Namespace }}
+  name: rhdh-rhoai-dashboard-permissions{{ if .Values.global.isSecondaryInstance }}-{{ .Release.Namespace }}{{ end }}
   namespace: rhoai-model-registries
 roleRef:
   apiGroup: rbac.authorization.k8s.io

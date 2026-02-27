@@ -1,7 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: cluster-reader-binding-{{ .Release.Namespace }}
+  name: cluster-reader-binding{{ if .Values.global.isSecondaryInstance }}-{{ .Release.Namespace }}{{ end }}
   namespace: {{ .Release.Namespace }}
 subjects:
   - kind: ServiceAccount
