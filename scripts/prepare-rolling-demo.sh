@@ -3,6 +3,7 @@
 # ----------- Constants ----------- #
 
 RHDH_NAMESPACE="${RHDH_NAMESPACE:-rolling-demo-ns}"
+ARGOCD_APP_NAME="${ARGOCD_APP_NAME:-rolling-demo}"
 ARGOCD_NAMESPACE="openshift-gitops"
 PAC_NAMESPACE="openshift-pipelines"
 LIGHTSPEED_POSTGRES_NAMESPACE="lightspeed-postgres"
@@ -239,7 +240,7 @@ kubectl create secret generic "$SECRET_NAME" \
     --dry-run=client -o yaml | kubectl apply --filename - --overwrite=true >/dev/null
 log "Secret $SECRET_NAME created successfully."
 
-SECRET_NAME="rolling-demo-postgresql"
+SECRET_NAME="${ARGOCD_APP_NAME}-postgresql"
 log "Creating $SECRET_NAME secret..."
 kubectl create secret generic "$SECRET_NAME" \
     --namespace="$RHDH_NAMESPACE" \
@@ -301,26 +302,28 @@ kubectl create secret generic "$SECRET_NAME" \
     --dry-run=client -o yaml | kubectl apply --filename - --overwrite=true >/dev/null
 log "Secret $SECRET_NAME created successfully."
 
-SECRET_NAME="pipelines-as-code-secret"
-log "Creating $SECRET_NAME secret..."
-kubectl create secret generic "$SECRET_NAME" \
-    --namespace="$PAC_NAMESPACE" \
-    --from-literal=github-application-id="$GITHUB_APP_APP_ID" \
-    --from-literal=github-private-key="$GITHUB_APP_PRIVATE_KEY" \
-    --from-literal=webhook.secret="$GITHUB_APP_WEBHOOK_SECRET" \
-    --dry-run=client -o yaml | kubectl apply --filename - --overwrite=true >/dev/null
-log "Secret $SECRET_NAME created successfully."
+if [[ "${IS_SECONDARY_INSTANCE}" != "true" ]]; then
+  SECRET_NAME="pipelines-as-code-secret"
+  log "Creating $SECRET_NAME secret..."
+  kubectl create secret generic "$SECRET_NAME" \
+      --namespace="$PAC_NAMESPACE" \
+      --from-literal=github-application-id="$GITHUB_APP_APP_ID" \
+      --from-literal=github-private-key="$GITHUB_APP_PRIVATE_KEY" \
+      --from-literal=webhook.secret="$GITHUB_APP_WEBHOOK_SECRET" \
+      --dry-run=client -o yaml | kubectl apply --filename - --overwrite=true >/dev/null
+  log "Secret $SECRET_NAME created successfully."
 
-SECRET_NAME="lightspeed-postgres-info"
-log "Creating $SECRET_NAME secret in $LIGHTSPEED_POSTGRES_NAMESPACE..."
-kubectl create secret generic "$SECRET_NAME" \
-    --namespace="$LIGHTSPEED_POSTGRES_NAMESPACE" \
-    --from-literal=namespace="$LIGHTSPEED_POSTGRES_NAMESPACE" \
-    --from-literal=user="$LIGHTSPEED_POSTGRES_USER" \
-    --from-literal=password="$LIGHTSPEED_POSTGRES_PASSWORD" \
-    --from-literal=db-name="$LIGHTSPEED_POSTGRES_DB" \
-    --dry-run=client -o yaml | kubectl apply --filename - --overwrite=true >/dev/null
-log "Secret $SECRET_NAME created successfully."
+  SECRET_NAME="lightspeed-postgres-info"
+  log "Creating $SECRET_NAME secret in $LIGHTSPEED_POSTGRES_NAMESPACE..."
+  kubectl create secret generic "$SECRET_NAME" \
+      --namespace="$LIGHTSPEED_POSTGRES_NAMESPACE" \
+      --from-literal=namespace="$LIGHTSPEED_POSTGRES_NAMESPACE" \
+      --from-literal=user="$LIGHTSPEED_POSTGRES_USER" \
+      --from-literal=password="$LIGHTSPEED_POSTGRES_PASSWORD" \
+      --from-literal=db-name="$LIGHTSPEED_POSTGRES_DB" \
+      --dry-run=client -o yaml | kubectl apply --filename - --overwrite=true >/dev/null
+  log "Secret $SECRET_NAME created successfully."
+fi
 
 SECRET_NAME="lightspeed-postgres-info"
 log "Creating $SECRET_NAME secret in $RHDH_NAMESPACE..."
@@ -335,9 +338,11 @@ log "Secret $SECRET_NAME created successfully."
 
 # ------------- Setup Openshift Pipelines ------------- #
 
-# Configure cosign
-log "Configuring Cosign signing secrets in namespace '$PAC_NAMESPACE'..."
-configure_cosign_signing_secret "$PAC_NAMESPACE"
+if [[ "${IS_SECONDARY_INSTANCE}" != "true" ]]; then
+  # Configure cosign
+  log "Configuring Cosign signing secrets in namespace '$PAC_NAMESPACE'..."
+  configure_cosign_signing_secret "$PAC_NAMESPACE"
+fi
 
 # Configure the pipelines setup - see scripts/configure-pipelines for more details
 bash ./configure-pipelines.sh

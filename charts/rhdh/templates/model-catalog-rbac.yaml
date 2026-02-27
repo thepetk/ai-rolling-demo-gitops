@@ -5,6 +5,7 @@ metadata:
   name: rhdh-rhoai-bridge
   namespace: {{ .Release.Namespace }}
 ---
+{{- if not .Values.global.isSecondaryInstance }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -31,11 +32,12 @@ rules:
   - apiGroups: ["apps"]
     resources: ["deployments"]
     verbs: ["get", "list", "watch", "patch"]
+{{- end }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: rhdh-rhoai-bridge
+  name: rhdh-rhoai-bridge-{{ .Release.Namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -48,7 +50,7 @@ subjects:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: rhdh-rhoai-dashboard-permissions
+  name: rhdh-rhoai-dashboard-permissions-{{ .Release.Namespace }}
   namespace: rhoai-model-registries
 roleRef:
   apiGroup: rbac.authorization.k8s.io

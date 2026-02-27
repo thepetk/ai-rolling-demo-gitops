@@ -1,4 +1,5 @@
 global:
+  isSecondaryInstance: false
   dynamic:
     includes:
       - "dynamic-plugins.default.yaml"
