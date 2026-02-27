@@ -526,6 +526,12 @@ backstage:
               - name: default
                 url: https://${ARGOCD_HOSTNAME}
                 token: ${ARGOCD_API_TOKEN}
+        i18n:
+          locales:
+            - en
+            - it
+            - ja
+            - fr
         proxy:
           endpoints:
             "/developer-hub":
