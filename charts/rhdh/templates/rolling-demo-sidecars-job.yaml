@@ -13,7 +13,7 @@ spec:
           command: ["/bin/bash", "-c"]
           args:
             - |
-              DEPLOYMENT="rolling-demo-backstage"
+              DEPLOYMENT="{{ .Release.Name }}-backstage"
               NAMESPACE="{{ .Release.Namespace }}"
 
               echo "Waiting deployment ${DEPLOYMENT} to be available.."
