@@ -608,7 +608,7 @@ backstage:
         - name: dynamic-plugins
           configMap:
             defaultMode: 420
-            name: rolling-demo-dynamic-plugins
+            name: '{{ .Release.Name }}-dynamic-plugins'
             optional: true
         - name: dynamic-plugins-npmrc
           secret:
