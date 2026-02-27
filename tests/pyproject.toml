@@ -11,7 +11,13 @@ dependencies = [
 ]
 
 [tool.pytest.ini_options]
-testpaths = ["."]
+testpaths = [
+    "test_login.py",
+    "test_navbar.py",
+    "test_sidebar.py",
+    "test_extensions.py",
+    "test_lightspeed.py",
+]
 markers = [
     "smoke: quick sanity checks that do not require authentication",
     "auth_required: tests that require a logged-in session",
