@@ -111,6 +111,9 @@ spec:
                 "envFrom": [
                   { "secretRef": { "name": "llama-stack-secrets" } }
                 ],
+                "env": [
+                  { "name": "VLLM_TLS_VERIFY", "value": "false" }
+                ],
                 "image": "quay.io/redhat-ai-dev/llama-stack:0.1.4",
                 "imagePullPolicy": "Always",
                 "volumeMounts": [
