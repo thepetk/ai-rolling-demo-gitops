@@ -4,7 +4,7 @@ Here are the steps required to setup an instance of the rolling demo on your own
 
 ### Pre-requisites
 
-You need an [OpenShift cluster (version 4.19+)](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html-single/web_console/index) of type `g5.4xlarge` or bigger.
+You need an [OpenShift cluster (version 4.19+)](https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html-single/web_console/index) of type `g5.2xlarge` or bigger.
 
 You have cloned locally the [odh-kubeflow-model-registry-setup](https://github.com/redhat-ai-dev/odh-kubeflow-model-registry-setup) repo.
 
@@ -126,13 +126,16 @@ After configuring your `scripts/private-env` file, run the setup from the reposi
 make install
 ```
 
-The `setup.sh` script automates the entire setup process:
+The `setup.sh` script automates the entire setup process by calling focused subscripts in order:
 
-1. Installs the required operators (OpenShift GitOps, [OpenShift Pipelines](), Node Feature Discovery, NVIDIA GPU).
-2. Creates the NFD instance and NVIDIA ClusterPolicy.
-3. Applies the ODH Kubeflow Model Registry kustomize and waits for the job to complete.
-4. Runs [prepare-rolling-demo.sh](../scripts/prepare-rolling-demo.sh) to create service accounts, secrets, and configure pipelines.
-5. Applies the ArgoCD Application with your configured `GITOPS_REPO_URL`, `GITOPS_TARGET_REVISION`, and `RHDH_CLUSTER_ROUTER_BASE` values.
+1. [`install-operators.sh`](../scripts/install-operators.sh) — installs the required operators (OpenShift GitOps, OpenShift Pipelines, Node Feature Discovery, NVIDIA GPU) and creates the NFD instance and NVIDIA ClusterPolicy.
+2. [`setup-rhoai.sh`](../scripts/setup-rhoai.sh) — applies the ODH Kubeflow Model Registry kustomize and waits for the setup job to complete.
+3. [`setup-argocd.sh`](../scripts/setup-argocd.sh) — retrieves ArgoCD admin credentials and generates an API token.
+4. [`setup-namespaces.sh`](../scripts/setup-namespaces.sh) — creates the RHDH and LightSpeed Postgres namespaces.
+5. [`setup-sa-tokens.sh`](../scripts/setup-sa-tokens.sh) — creates service accounts and generates their tokens.
+6. [`setup-secrets.sh`](../scripts/setup-secrets.sh) — creates all required Kubernetes secrets in the target namespaces.
+7. [`setup-pipelines.sh`](../scripts/setup-pipelines.sh) — configures the Cosign signing secret and runs the Tekton pipeline setup.
+8. [`apply-argocd-application.sh`](../scripts/apply-argocd-application.sh) — applies the ArgoCD Application with your configured `GITOPS_REPO_URL`, `GITOPS_TARGET_REVISION`, and `RHDH_CLUSTER_ROUTER_BASE` values.
 
 #### Skipping steps
 
@@ -145,6 +148,39 @@ For example, to jump straight to the rolling demo preparation:
 
 ```bash
 SKIP_INSTALL_DEPS=true SKIP_RHOAI_SETUP=true make install
+```
+
+#### Secondary instance
+
+If there's an instance of Rolling Demo already existing on your cluster configured (has Cosign keys, TektonConfig, Pipelines-as-Code secrets set):
+
+```bash
+IS_SECONDARY_INSTANCE=true make install
+```
+
+When `IS_SECONDARY_INSTANCE=true`:
+
+- The Cosign signing secret is not regenerated.
+- The TektonConfig `transparency.url` is not patched.
+- The `pipelines-as-code-secret` and the LightSpeed Postgres secret in the `PAC_NAMESPACE` are not created.
+- The ArgoCD Application is deployed with `global.isSecondaryInstance=true`.
+
+#### Optional overrides
+
+The following variables have built-in defaults and do not need to be set in `private-env` unless you want to change them:
+
+| Variable                        | Default               | Description                                                                                                                                       |
+| ------------------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `RHDH_NAMESPACE`                | `rolling-demo-ns`     | Namespace where RHDH and all related secrets are deployed.                                                                                        |
+| `ARGOCD_APP_NAME`               | `rolling-demo`        | Name of the ArgoCD Application created by `apply-argocd-application.sh`. Also used as the prefix for the PostgreSQL secret (`<name>-postgresql`). |
+| `ARGOCD_NAMESPACE`              | `openshift-gitops`    | Namespace where ArgoCD (OpenShift GitOps) is installed.                                                                                           |
+| `PAC_NAMESPACE`                 | `openshift-pipelines` | Namespace where OpenShift Pipelines and Pipelines-as-Code run.                                                                                    |
+| `LIGHTSPEED_POSTGRES_NAMESPACE` | `lightspeed-postgres` | Namespace where the LightSpeed PostgreSQL instance is deployed.                                                                                   |
+
+These can be set in `private-env` or passed directly on the command line:
+
+```bash
+ARGOCD_APP_NAME=my-demo RHDH_NAMESPACE=my-ns make install
 ```
 
 #### Working from a fork
