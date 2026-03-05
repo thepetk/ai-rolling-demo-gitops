@@ -7,13 +7,11 @@ source "$SCRIPTS_DIR/common.sh"
 
 source "$SCRIPTS_DIR/private-env"
 
-# ff RHDH_NAMESPACE is overridden via env var, recompute URL vars
-# that private-env hardcodes using the default namespace.
-if [[ -n "${RHDH_NAMESPACE}" ]]; then
-  RHDH_BASE_URL="https://rolling-demo-backstage-${RHDH_NAMESPACE}.${RHDH_CLUSTER_ROUTER_BASE}"
-  RHDH_CALLBACK_URL="${RHDH_BASE_URL}/api/auth/oidc/handler/frame"
-  export RHDH_BASE_URL RHDH_CALLBACK_URL
-fi
+# Recompute URL vars using the actual route name: {{ .Release.Name }}-backstage
+# The release name equals ARGOCD_APP_NAME, so both namespace and app name affect the URL.
+RHDH_BASE_URL="https://${ARGOCD_APP_NAME}-backstage-${RHDH_NAMESPACE}.${RHDH_CLUSTER_ROUTER_BASE}"
+RHDH_CALLBACK_URL="${RHDH_BASE_URL}/api/auth/oidc/handler/frame"
+export RHDH_BASE_URL RHDH_CALLBACK_URL
 
 # check_tools: verifies that all required CLI tools are installed
 check_tools() {

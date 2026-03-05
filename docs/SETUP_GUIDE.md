@@ -60,8 +60,6 @@ export BACKEND_SECRET="a-randomly-generated-string"
 # This is used to derive the RHDH URL and is injected as an ArgoCD
 # Helm parameter override for the clusterRouterBase chart value.
 export RHDH_CLUSTER_ROUTER_BASE="apps.mycluster.openshift.com"
-export RHDH_BASE_URL="https://rolling-demo-backstage-rolling-demo-ns.${RHDH_CLUSTER_ROUTER_BASE}"
-export RHDH_CALLBACK_URL="${RHDH_BASE_URL}/api/auth/oidc/handler/frame"
 
 # RHDH Postgres Secrets - any valid password strings for these two env vars will do
 export POSTGRESQL_POSTGRES_PASSWORD="your-preffered-postgres-pass"

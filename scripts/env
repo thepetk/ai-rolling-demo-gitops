@@ -25,8 +25,6 @@ export ARGOCD_USER=
 # RHDH secrets
 export BACKEND_SECRET=
 export RHDH_CLUSTER_ROUTER_BASE=
-export RHDH_CALLBACK_URL=
-export RHDH_BASE_URL=
 
 # RHDH Postgres Secrets
 export POSTGRESQL_POSTGRES_PASSWORD=
