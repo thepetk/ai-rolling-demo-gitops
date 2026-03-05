@@ -41,10 +41,6 @@ export KEYCLOAK_BASE_URL=
 export KEYCLOAK_LOGIN_REALM=
 export KEYCLOAK_CLIENT_SECRET=
 
-# Ollama secrets
-export OLLAMA_TOKEN=
-export OLLAMA_URL=
-
 # Llama Stack secrets (for Lightspeed Core Service)
 export VLLM_URL=
 export VLLM_API_KEY=
