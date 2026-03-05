@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Common setup sourced by all scripts.
-# Requires SCRIPTS_DIR to be set before sourcing.
-
 # GITOPS_DIR: the root of the gitops repo
 GITOPS_DIR="$(cd "$SCRIPTS_DIR/.." && pwd)"
 

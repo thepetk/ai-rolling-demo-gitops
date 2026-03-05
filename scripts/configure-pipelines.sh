@@ -1,7 +1,5 @@
 #!/bin/bash
-# source the private env
-# usually is called from scripts/prepare-rolling-demo
-# so all env vars have been checked.
+
 source ./private-env
 
 # Constants
