@@ -1,4 +1,4 @@
 .PHONY: install
 
 install:
-	bash scripts/setup.sh
+	bash setup.sh
