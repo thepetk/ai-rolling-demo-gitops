@@ -18,12 +18,14 @@ until kubectl get tektonconfig config >/dev/null 2>&1; do
     log "TektonConfig not ready yet. Waiting..."
     sleep 3
 done
-TEKTON_CONFIG=$(yq ".spec.chain.\"transparency.url\" = \"http://rekor-server.${NAMESPACE}.svc\"" $BASE_DIR/resources/tekton-config.yaml -M -I=0 -o='json')
-log "Updating the TektonConfig resource..."
-kubectl patch tektonconfig config --type 'merge' --patch "${TEKTON_CONFIG}" >/dev/null 2>&1
-if [ $? -ne 0 ]; then
-    log_fail
-    exit 1
+if [[ "${IS_SECONDARY_INSTANCE}" != "true" ]]; then
+  TEKTON_CONFIG=$(yq ".spec.chain.\"transparency.url\" = \"http://rekor-server.${NAMESPACE}.svc\"" $BASE_DIR/resources/tekton-config.yaml -M -I=0 -o='json')
+  log "Updating the TektonConfig resource..."
+  kubectl patch tektonconfig config --type 'merge' --patch "${TEKTON_CONFIG}" >/dev/null 2>&1
+  if [ $? -ne 0 ]; then
+      log_fail
+      exit 1
+  fi
 fi
 
 
