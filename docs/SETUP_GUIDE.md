@@ -86,19 +86,6 @@ export KEYCLOAK_LOGIN_REALM=${KEYCLOAK_REALM}
 export KEYCLOAK_METADATA_URL="https://your-keycloak-host/auth/realms/${KEYCLOAK_REALM}"
 export KEYCLOAK_BASE_URL="https://your-keycloak-host/auth"
 
-# NOTE: For Ollama & Lightspeed we rely on 3Scale. Therefore,
-# to setup your Ollama & Lightspeed tokens & urls you'll need
-# first to register an application on the 3Scale service.
-# Check more info here: https://docs.redhat.com/en/documentation/red_hat_3scale_api_management/2.11/html/getting_started/first-steps-with-threescale_configuring-your-api
-
-# Ollama secrets
-# Hint:: Per RHDHPAI case the Lightspeed and Ollama tokens can be found in https://console-openshift-console.apps.rosa.redhat-ai-dev.m6no.p3.openshiftapps.com/
-# Namespace: rolling-demo-ns
-# Secret: lightspeed-secrets (keys are identical with the env var names below).
-# Remember to Base64 Decode the values for the various environment variables stored in the `lightpseed-secrets`.
-export OLLAMA_TOKEN="your-ollama-token"
-export OLLAMA_URL="https://ollama-model-service-apicast-production.your-3scale-host:443/v1"
-
 # Llama Stack secrets (for Lightspeed Core Service)
 # Hint:: Per RHDHPAI case the Llama Stack tokens can be found in https://console-openshift-console.apps.rosa.redhat-ai-dev.m6no.p3.openshiftapps.com/
 # Secret: llama-stack-secrets (keys are identical with the env var names below).
@@ -150,11 +137,18 @@ SKIP_INSTALL_DEPS=true SKIP_RHOAI_SETUP=true make install
 
 #### Secondary instance
 
-If there's an instance of Rolling Demo already existing on your cluster configured (has Cosign keys, TektonConfig, Pipelines-as-Code secrets set):
+If there's an instance of RHDH Rolling Demo already existing on your cluster (with Cosign keys, TektonConfig, and Pipelines-as-Code secrets already configured), you can deploy an additional instance by providing a different namespace and ArgoCD application name:
 
 ```bash
-IS_SECONDARY_INSTANCE=true make install
+RHDH_NAMESPACE=my-secondary-ns \
+ARGOCD_APP_NAME=my-secondary-app-name \
+IS_SECONDARY_INSTANCE=true \
+SKIP_INSTALL_DEPS=true \
+SKIP_RHOAI_SETUP=true \
+make install
 ```
+
+`setup.sh` will automatically compute `RHDH_BASE_URL` and `RHDH_CALLBACK_URL` from `ARGOCD_APP_NAME`, `RHDH_NAMESPACE`, and `RHDH_CLUSTER_ROUTER_BASE`.
 
 When `IS_SECONDARY_INSTANCE=true`:
 
@@ -167,18 +161,16 @@ When `IS_SECONDARY_INSTANCE=true`:
 
 The following variables have built-in defaults and do not need to be set in `private-env` unless you want to change them:
 
-| Variable                        | Default               | Description                                                                                                                                       |
-| ------------------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `RHDH_NAMESPACE`                | `rolling-demo-ns`     | Namespace where RHDH and all related secrets are deployed.                                                                                        |
-| `ARGOCD_APP_NAME`               | `rolling-demo`        | Name of the ArgoCD Application created by `apply-argocd-application.sh`. Also used as the prefix for the PostgreSQL secret (`<name>-postgresql`). |
-| `ARGOCD_NAMESPACE`              | `openshift-gitops`    | Namespace where ArgoCD (OpenShift GitOps) is installed.                                                                                           |
-| `PAC_NAMESPACE`                 | `openshift-pipelines` | Namespace where OpenShift Pipelines and Pipelines-as-Code run.                                                                                    |
-| `LIGHTSPEED_POSTGRES_NAMESPACE` | `lightspeed-postgres` | Namespace where the LightSpeed PostgreSQL instance is deployed.                                                                                   |
+| Variable                        | Default               | Description                                                                                     |
+| ------------------------------- | --------------------- | ----------------------------------------------------------------------------------------------- |
+| `ARGOCD_NAMESPACE`              | `openshift-gitops`    | Namespace where ArgoCD (OpenShift GitOps) is installed.                                         |
+| `PAC_NAMESPACE`                 | `openshift-pipelines` | Namespace where OpenShift Pipelines and Pipelines-as-Code run.                                  |
+| `LIGHTSPEED_POSTGRES_NAMESPACE` | `lightspeed-postgres` | Namespace where the LightSpeed PostgreSQL instance is deployed.                                 |
 
 These can be set in `private-env` or passed directly on the command line:
 
 ```bash
-ARGOCD_APP_NAME=my-demo RHDH_NAMESPACE=my-ns make install
+PAC_NAMESPACE=my-pipelines-ns make install
 ```
 
 #### Working from a fork
