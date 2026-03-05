@@ -7,6 +7,7 @@
 GITOPS_DIR="$(cd "$SCRIPTS_DIR/.." && pwd)"
 
 # DEPS_DIR: the directory where dependency
+# shellcheck disable=SC2034
 DEPS_DIR="$GITOPS_DIR/deps"
 
 source "$SCRIPTS_DIR/logging.sh"

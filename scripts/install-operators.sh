@@ -139,6 +139,7 @@ create_nfd_instance() {
 }
 
 # wait_for_nfd_instance: waits for NFD instance to be Available/Upgradeable
+# shellcheck disable=SC2120
 wait_for_nfd_instance() {
   local timeout="${1:-$TIMEOUT}"
   local elapsed=0
@@ -171,6 +172,7 @@ create_cluster_policy() {
 }
 
 # wait_for_cluster_policy: waits for ClusterPolicy status to be ready
+# shellcheck disable=SC2120
 wait_for_cluster_policy() {
   local timeout="${1:-$TIMEOUT}"
   local elapsed=0

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # get_argocd_admin_creds: fetches argocd admin password and argocd hostname
+# shellcheck disable=SC2120
 get_argocd_admin_creds() {
   local namespace="${1:-openshift-gitops}"
 

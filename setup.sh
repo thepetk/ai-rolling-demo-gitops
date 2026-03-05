@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# SCRIPTS_DIR: the directory where this script is located
-SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# SCRIPTS_DIR: the scripts/ subdirectory relative to this file
+SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/scripts" && pwd)"
 
 source "$SCRIPTS_DIR/common.sh"
 
@@ -62,8 +62,6 @@ required_vars=(
   KEYCLOAK_BASE_URL
   KEYCLOAK_LOGIN_REALM
   KEYCLOAK_CLIENT_SECRET
-  OLLAMA_URL
-  OLLAMA_TOKEN
   VLLM_URL
   VLLM_API_KEY
   VALIDATION_PROVIDER
@@ -78,8 +76,16 @@ for var in "${required_vars[@]}"; do
 done
 
 # skip operators and RHOAI installation if that's the case
-[[ "${SKIP_INSTALL_DEPS}" == "true" ]] && log "SKIP_INSTALL_DEPS=true — skipping operator/instance installation." || bash "$SCRIPTS_DIR/install-operators.sh"
-[[ "${SKIP_RHOAI_SETUP}" == "true" ]]  && log "SKIP_RHOAI_SETUP=true — skipping ODH Kubeflow Model Registry setup." || bash "$SCRIPTS_DIR/setup-rhoai.sh"
+if [[ "${SKIP_INSTALL_DEPS}" == "true" ]]; then
+  log "SKIP_INSTALL_DEPS=true — skipping operator/instance installation."
+else
+  bash "$SCRIPTS_DIR/install-operators.sh"
+fi
+if [[ "${SKIP_RHOAI_SETUP}" == "true" ]]; then
+  log "SKIP_RHOAI_SETUP=true — skipping ODH Kubeflow Model Registry setup."
+else
+  bash "$SCRIPTS_DIR/setup-rhoai.sh"
+fi
 
 # source other setup scripts to create namespaces, service accounts, secrets, and ArgoCD setup
 source "$SCRIPTS_DIR/setup-argocd.sh"

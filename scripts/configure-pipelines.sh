@@ -5,9 +5,8 @@
 source ./private-env
 
 # Constants
-CRD="tektonconfigs"
 NAMESPACE="${RHDH_NAMESPACE:-rolling-demo-ns}"
-BASE_DIR="$(realpath $(dirname ${BASH_SOURCE[0]}))"
+BASE_DIR="$(realpath "$(dirname "${BASH_SOURCE[0]}")")"
 PAC_NAMESPACE="openshift-pipelines"
 
 source "$BASE_DIR/logging.sh"
@@ -19,10 +18,9 @@ until kubectl get tektonconfig config >/dev/null 2>&1; do
     sleep 3
 done
 if [[ "${IS_SECONDARY_INSTANCE}" != "true" ]]; then
-  TEKTON_CONFIG=$(yq ".spec.chain.\"transparency.url\" = \"http://rekor-server.${NAMESPACE}.svc\"" $BASE_DIR/resources/tekton-config.yaml -M -I=0 -o='json')
+  TEKTON_CONFIG=$(yq ".spec.chain.\"transparency.url\" = \"http://rekor-server.${NAMESPACE}.svc\"" "$BASE_DIR/resources/tekton-config.yaml" -M -I=0 -o='json')
   log "Updating the TektonConfig resource..."
-  kubectl patch tektonconfig config --type 'merge' --patch "${TEKTON_CONFIG}" >/dev/null 2>&1
-  if [ $? -ne 0 ]; then
+  if ! kubectl patch tektonconfig config --type 'merge' --patch "${TEKTON_CONFIG}" >/dev/null 2>&1; then
       log_fail
       exit 1
   fi
@@ -32,7 +30,7 @@ fi
 # Fetching cosign public key
 # Fetches cosign public key needed for namespace setup
 log "Waiting for signing-secrets to be available..."
-while ! kubectl get secrets -n $PAC_NAMESPACE  signing-secrets >/dev/null 2>&1; do
+while ! kubectl get secrets -n "$PAC_NAMESPACE" signing-secrets >/dev/null 2>&1; do
     log "signing-secrets not found yet. Waiting..."
     sleep 2
 done
@@ -42,8 +40,7 @@ COSIGN_SIGNING_PUBLIC_KEY=""
 log "Fetching cosign public key..."
 while [ -z "${COSIGN_SIGNING_PUBLIC_KEY:-}" ]; do
     sleep 2
-    COSIGN_SIGNING_PUBLIC_KEY=$(kubectl get secrets -n $PAC_NAMESPACE signing-secrets -o jsonpath='{.data.cosign\.pub}' 2>/dev/null)
-    if [ $? -ne 0 ]; then
+    if ! COSIGN_SIGNING_PUBLIC_KEY=$(kubectl get secrets -n "$PAC_NAMESPACE" signing-secrets -o jsonpath='{.data.cosign\.pub}' 2>/dev/null); then
         log_fail
         exit 1
     fi
@@ -56,11 +53,10 @@ done
 # Creating Namespace Setup Tekton Task Definition
 # Creates Tekton Task definition for creating custom namespaces with needed resources
 log "Creating Namespace Setup Tekton Task Definition..."
-DEV_SETUP_TASK=$(cat $BASE_DIR/resources/dev-setup-task.yaml)
+DEV_SETUP_TASK=$(cat "$BASE_DIR/resources/dev-setup-task.yaml")
 
-if [ ! -z "${GITOPS_GIT_TOKEN}" ]; then
-    DEV_SETUP_TASK=$(echo "${DEV_SETUP_TASK}" | yq ".spec.params[0].default = \"${GITOPS_GIT_TOKEN}\"" -M)
-    if [ $? -ne 0 ]; then
+if [ -n "${GITOPS_GIT_TOKEN}" ]; then
+    if ! DEV_SETUP_TASK=$(echo "${DEV_SETUP_TASK}" | yq ".spec.params[0].default = \"${GITOPS_GIT_TOKEN}\"" -M); then
         log_fail
         exit 1
     fi
@@ -68,9 +64,8 @@ if [ ! -z "${GITOPS_GIT_TOKEN}" ]; then
 fi
 
 # setup pipelines webhook secret
-if [ ! -z "${GITHUB_APP_WEBHOOK_SECRET}" ]; then
-    DEV_SETUP_TASK=$(echo "${DEV_SETUP_TASK}" | yq ".spec.params[2].default = \"${GITHUB_APP_WEBHOOK_SECRET}\"" -M)
-    if [ $? -ne 0 ]; then
+if [ -n "${GITHUB_APP_WEBHOOK_SECRET}" ]; then
+    if ! DEV_SETUP_TASK=$(echo "${DEV_SETUP_TASK}" | yq ".spec.params[2].default = \"${GITHUB_APP_WEBHOOK_SECRET}\"" -M); then
         log_fail
         exit 1
     fi
@@ -78,10 +73,9 @@ if [ ! -z "${GITHUB_APP_WEBHOOK_SECRET}" ]; then
 fi
 
 # setup dockerconfig json
-if [ ! -z "${QUAY_DOCKERCONFIGJSON}" ]; then
-    export QUAY_DOCKERCONFIGJSON=${QUAY_DOCKERCONFIGJSON}
-    DEV_SETUP_TASK=$(echo "${DEV_SETUP_TASK}" | yq ".spec.params[3].default = strenv(QUAY_DOCKERCONFIGJSON)" -M)
-    if [ $? -ne 0 ]; then
+if [ -n "${QUAY_DOCKERCONFIGJSON}" ]; then
+    export QUAY_DOCKERCONFIGJSON="${QUAY_DOCKERCONFIGJSON}"
+    if ! DEV_SETUP_TASK=$(echo "${DEV_SETUP_TASK}" | yq ".spec.params[3].default = strenv(QUAY_DOCKERCONFIGJSON)" -M); then
         log_fail
         exit 1
     fi
@@ -154,17 +148,16 @@ if [ -n \"\$QUAY_DOCKERCONFIGJSON\" ]; then
   echo \"OK\"
 fi"
 
-DEV_SETUP_TASK=$(echo "${DEV_SETUP_TASK}" | yq ".spec.steps[0].script = strenv(TASK_SCRIPT)" -M)
-if [ $? -ne 0 ]; then
+if ! DEV_SETUP_TASK=$(echo "${DEV_SETUP_TASK}" | yq ".spec.steps[0].script = strenv(TASK_SCRIPT)" -M); then
     log_fail
     exit 1
 fi
 
 log "Applying Tekton Task definition..."
-cat <<EOF | kubectl apply -n ${NAMESPACE} -f - >/dev/null
+if ! kubectl apply -n "${NAMESPACE}" -f - >/dev/null <<EOF
 ${DEV_SETUP_TASK}
 EOF
-if [ $? -ne 0 ]; then
+then
     log_fail
     exit 1
 fi

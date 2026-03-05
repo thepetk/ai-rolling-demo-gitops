@@ -14,7 +14,7 @@ ODH_JOB_NAMESPACE="odh-kubeflow-model-registry-setup"
 # run_rhoai_setup: applies the ODH Kubeflow Model Registry kustomize and waits for the job
 run_rhoai_setup() {
   log "Applying kustomize from $ODH_SETUP_DIR/kustomize-rhoai..."
-  cd "$ODH_SETUP_DIR"
+  cd "$ODH_SETUP_DIR" || { log "Failed to cd into $ODH_SETUP_DIR. Exiting."; log_fail; exit 1; }
   if ! oc apply -k "./kustomize-rhoai" >/dev/null 2>&1; then
     log "Failed to apply kustomize-rhoai."
     log_fail

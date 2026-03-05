@@ -8,7 +8,7 @@ source "$SCRIPTS_DIR/common.sh"
 # apply_argocd_application: applies the ArgoCD Application with configured values
 apply_argocd_application() {
   log "Applying gitops/application.yaml..."
-  cd "$GITOPS_DIR"
+  cd "$GITOPS_DIR" || { log "Failed to cd into $GITOPS_DIR. Exiting."; log_fail; exit 1; }
   local openshift_ai_url="https://rhods-dashboard-redhat-ods-applications.${RHDH_CLUSTER_ROUTER_BASE}/"
   local openshift_ai_param="global.dynamic.plugins[13].pluginConfig.dynamicPlugins.frontend.red-hat-developer-hub\\.backstage-plugin-global-header.mountPoints[13].config.props.link"
   local rhdh_namespace="${RHDH_NAMESPACE:-rolling-demo-ns}"
