@@ -7,7 +7,7 @@ dependencies = [
     "playwright>=1.44",
     "pytest-playwright>=0.5",
     "pytest>=8.0",
-    "pyotp>=2.9",
+    "requests>=2.31",
 ]
 
 [tool.pytest.ini_options]
