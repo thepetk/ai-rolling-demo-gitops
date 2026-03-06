@@ -5,7 +5,7 @@ SECRET_NAME="github-secrets"
 log "Creating $SECRET_NAME secret..."
 kubectl create secret generic "$SECRET_NAME" \
     --namespace="$RHDH_NAMESPACE" \
-    --from-literal=GITHUB_ORG="$GITHUB_ORG" \
+    --from-literal=GITOPS_GIT_ORG="$GITOPS_GIT_ORG" \
     --from-literal=GITHUB_APP_APP_ID="$GITHUB_APP_APP_ID" \
     --from-literal=GITHUB_APP_CLIENT_ID="$GITHUB_APP_CLIENT_ID" \
     --from-literal=GITHUB_APP_CLIENT_SECRET="$GITHUB_APP_CLIENT_SECRET" \

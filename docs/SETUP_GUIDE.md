@@ -43,8 +43,8 @@ export RHDH_NAMESPACE="rolling-demo-ns"
 # https://github.com/redhat-ai-dev/ai-rhdh-installer/blob/main/docs/APP-SETUP.md
 export GITHUB_APP_APP_ID="your-github-apps-app-id"
 export GITOPS_GIT_TOKEN="your-github-token"
-# GITHUB_ORG: the GitHub organization used for catalog discovery in RHDH.
-export GITHUB_ORG="your-github-org-name"
+# GITOPS_GIT_ORG: the GitHub organization used for catalog discovery in RHDH.
+export GITOPS_GIT_ORG="your-github-org-name"
 export GITHUB_APP_CLIENT_ID="your-github-app-client-id"
 export GITHUB_APP_CLIENT_SECRET="your-github-app-client-secret"
 export GITHUB_APP_WEBHOOK_URL="your-github-app-webhook-url"
@@ -161,11 +161,11 @@ When `IS_SECONDARY_INSTANCE=true`:
 
 The following variables have built-in defaults and do not need to be set in `private-env` unless you want to change them:
 
-| Variable                        | Default               | Description                                                                                     |
-| ------------------------------- | --------------------- | ----------------------------------------------------------------------------------------------- |
-| `ARGOCD_NAMESPACE`              | `openshift-gitops`    | Namespace where ArgoCD (OpenShift GitOps) is installed.                                         |
-| `PAC_NAMESPACE`                 | `openshift-pipelines` | Namespace where OpenShift Pipelines and Pipelines-as-Code run.                                  |
-| `LIGHTSPEED_POSTGRES_NAMESPACE` | `lightspeed-postgres` | Namespace where the LightSpeed PostgreSQL instance is deployed.                                 |
+| Variable                        | Default               | Description                                                     |
+| ------------------------------- | --------------------- | --------------------------------------------------------------- |
+| `ARGOCD_NAMESPACE`              | `openshift-gitops`    | Namespace where ArgoCD (OpenShift GitOps) is installed.         |
+| `PAC_NAMESPACE`                 | `openshift-pipelines` | Namespace where OpenShift Pipelines and Pipelines-as-Code run.  |
+| `LIGHTSPEED_POSTGRES_NAMESPACE` | `lightspeed-postgres` | Namespace where the LightSpeed PostgreSQL instance is deployed. |
 
 These can be set in `private-env` or passed directly on the command line:
 

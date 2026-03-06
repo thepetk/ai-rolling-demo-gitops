@@ -12,7 +12,7 @@ export RHDH_NAMESPACE=rolling-demo-ns
 # Github secrets
 export GITHUB_APP_APP_ID=
 export GITOPS_GIT_TOKEN=
-export GITHUB_ORG=
+export GITOPS_GIT_ORG=
 export GITHUB_APP_CLIENT_ID=
 export GITHUB_APP_CLIENT_SECRET=
 export GITHUB_APP_WEBHOOK_URL=
