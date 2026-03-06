@@ -103,6 +103,58 @@ export LIGHTSPEED_POSTGRES_USER="your-preffered-lightspeed-psql-username"
 export LIGHTSPEED_POSTGRES_DB="your-preffered-lightspeed-psql-dbname"
 ```
 
+#### `env` Changelog
+
+This section tracks variables added or removed between releases. Use it to update your `private-env` when upgrading.
+
+---
+
+##### v0.1.0 → v0.2.0
+
+**Removed:**
+
+- `ADMIN_TOKEN`: No longer needed.
+
+---
+
+##### v0.2.0 → v0.2.1 → v0.2.2
+
+No changes.
+
+---
+
+##### v0.2.2 → v0.3.0
+
+**Added:**
+
+- `RHDH_BASE_URL` — RHDH console URL (RHDH secrets section)
+- `OLLAMA_TOKEN`, `OLLAMA_URL` — new **Ollama secrets** section
+- `LIGHTSPEED_URL`, `LIGHTSPEED_TOKEN` — new **Lightspeed secrets** section
+- `LIGHTSPEED_POSTGRES_PASSWORD`, `LIGHTSPEED_POSTGRES_USER`, `LIGHTSPEED_POSTGRES_DB` — new **Postgres secrets** section
+
+---
+
+##### v0.3.0 → v0.5.0
+
+No changes.
+
+---
+
+##### v0.5.0 → v1.0.0 (current)
+
+**Added:**
+
+- New **GitOps repo settings** section: `GITOPS_REPO_URL`, `GITOPS_TARGET_REVISION`, `ODH_SETUP_DIR`, `RHDH_NAMESPACE` (defaults to `rolling-demo-ns`)
+- `RHDH_CLUSTER_ROUTER_BASE` — cluster domain suffix, replaces `RHDH_CALLBACK_URL` and `RHDH_BASE_URL`
+- New **Llama Stack secrets** section: `VLLM_URL`, `VLLM_API_KEY`, `VALIDATION_PROVIDER`, `VALIDATION_MODEL_NAME` — replaces the Ollama and Lightspeed URL/token variables
+
+**Removed:**
+
+- `ARGOCD_PASSWORD`, `ARGOCD_HOSTNAME`, `ARGOCD_TOKEN` — ArgoCD section now only requires `ARGOCD_USER`
+- `RHDH_CALLBACK_URL`, `RHDH_BASE_URL`
+- `OLLAMA_TOKEN`, `OLLAMA_URL` — entire Ollama section removed
+- `LIGHTSPEED_URL`, `LIGHTSPEED_TOKEN` — replaced by Llama Stack section
+
 ### Installation
 
 After configuring your `scripts/private-env` file, run the setup from the repository root:
