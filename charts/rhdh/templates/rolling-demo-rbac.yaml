@@ -1,12 +1,12 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: cluster-reader-binding
-  namespace: rolling-demo-ns
+  name: cluster-reader-binding{{ if .Values.global.isSecondaryInstance }}-{{ .Release.Namespace }}{{ end }}
+  namespace: {{ .Release.Namespace }}
 subjects:
   - kind: ServiceAccount
     name: k8s-sa
-    namespace: rolling-demo-ns
+    namespace: {{ .Release.Namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole

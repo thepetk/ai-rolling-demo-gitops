@@ -13,8 +13,8 @@ spec:
           command: ["/bin/bash", "-c"]
           args:
             - |
-              DEPLOYMENT="rolling-demo-backstage"
-              NAMESPACE="rolling-demo-ns"
+              DEPLOYMENT="{{ .Release.Name }}-backstage"
+              NAMESPACE="{{ .Release.Namespace }}"
 
               echo "Waiting deployment ${DEPLOYMENT} to be available.."
               kubectl rollout status deployment/$DEPLOYMENT -n $NAMESPACE --timeout=600s

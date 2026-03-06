@@ -3,6 +3,12 @@
 # IMPORTANT: Do not use this file directly to store your secrets
 # create a copy in the same dir called 'private-env'
 
+# GitOps repo settings
+export GITOPS_REPO_URL=
+export GITOPS_TARGET_REVISION=
+export ODH_SETUP_DIR=
+export RHDH_NAMESPACE=rolling-demo-ns
+
 # Github secrets
 export GITHUB_APP_APP_ID=
 export GITOPS_GIT_TOKEN=
@@ -15,14 +21,10 @@ export GITHUB_APP_PRIVATE_KEY=
 
 # ArgoCD secrets
 export ARGOCD_USER=
-export ARGOCD_PASSWORD=
-export ARGOCD_HOSTNAME=
-export ARGOCD_TOKEN=
 
 # RHDH secrets
 export BACKEND_SECRET=
-export RHDH_CALLBACK_URL=
-export RHDH_BASE_URL=
+export RHDH_CLUSTER_ROUTER_BASE=
 
 # RHDH Postgres Secrets
 export POSTGRESQL_POSTGRES_PASSWORD=
@@ -39,13 +41,11 @@ export KEYCLOAK_BASE_URL=
 export KEYCLOAK_LOGIN_REALM=
 export KEYCLOAK_CLIENT_SECRET=
 
-# Ollama secrets
-export OLLAMA_TOKEN=
-export OLLAMA_URL=
-
-# Lightspeed secrets
-export LIGHTSPEED_URL=
-export LIGHTSPEED_TOKEN=
+# Llama Stack secrets (for Lightspeed Core Service)
+export VLLM_URL=
+export VLLM_API_KEY=
+export VALIDATION_PROVIDER=
+export VALIDATION_MODEL_NAME=
 
 # Postgres secrets
 export LIGHTSPEED_POSTGRES_PASSWORD=

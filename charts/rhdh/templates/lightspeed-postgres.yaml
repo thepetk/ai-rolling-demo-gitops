@@ -1,3 +1,4 @@
+{{- if not .Values.global.isSecondaryInstance }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -121,3 +122,4 @@ spec:
           );
           EOF
       restartPolicy: OnFailure
+{{- end }}

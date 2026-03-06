@@ -1,0 +1,4 @@
+# SC1091: "Not following: file was not specified as input."
+# sourced files use dynamic paths (e.g. "$SCRIPTS_DIR/common.sh") that
+# shellcheck cannot resolve statically.
+disable=SC1091
