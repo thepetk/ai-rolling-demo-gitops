@@ -34,6 +34,23 @@ The rolling demo combines the following components so far:
 
 - In order to avoid overprovisioning of resources, the rolling demo uses a `pruner` cronjob that deletes all Software Template applications that are older than 24 hours. That means that all the openshift **and** github resources (deployments, repositories, argocd applications, etc.) are removed.
 
+## Development Branch & Lifecycle
+
+The repository maintains a `development` branch that serves as the integration branch for new changes before they reach the production (AI Rolling Demo) instance in RHDHAI DevCluster.
+
+### Branch Strategy
+
+| Branch        | ArgoCD Application | Namespace            | Purpose                                |
+| ------------- | ------------------ | -------------------- | -------------------------------------- |
+| `main`        | `rolling-demo`     | `rolling-demo-ns`    | Production instance, tracks `HEAD`     |
+| `development` | `rhdhai-rhdh-dev`  | `rhdhai-development` | Staging instance, tracks `development` |
+
+### Lifecycle
+
+1. **Develop** — New changes (plugin updates, config changes, chart updates) are committed to the `development` branch.
+2. **Validate** — The `rhdhai-rhdh-dev` ArgoCD application automatically syncs from the `development` branch, deploying the changes to the `rhdhai-development` namespace for testing.
+3. **Promote** — Once validated, changes are merged into `main`. The `rolling-demo` production application picks them up automatically via ArgoCD's self-heal and auto-sync policies.
+
 ## Rolling demo setup
 
 Some instructions on how to setup an instance of the rolling demo on your own can be found in [docs/SETUP_GUIDE.md](./docs/SETUP_GUIDE.md)
