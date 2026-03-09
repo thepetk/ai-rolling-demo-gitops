@@ -33,9 +33,8 @@ PIPELINES_OPERATOR_CHANNEL="${PIPELINES_OPERATOR_CHANNEL:-latest}"
 PIPELINES_STARTING_CSV="${PIPELINES_STARTING_CSV:-openshift-pipelines-operator-rh.v1.21.0}"
 
 # NFD operator subscription settings
-# Override NFD_OPERATOR_CHANNEL to e.g. stable-4.19 when running on an OCP 4.19 cluster.
 # If NFD_STARTING_CSV is not set, it will be auto-detected from the cluster catalog.
-NFD_OPERATOR_CHANNEL="${NFD_OPERATOR_CHANNEL:-stable-4.20}"
+NFD_OPERATOR_CHANNEL="${NFD_OPERATOR_CHANNEL:-stable}"
 NFD_STARTING_CSV="${NFD_STARTING_CSV:-}"
 
 # GPU operator subscription settings
