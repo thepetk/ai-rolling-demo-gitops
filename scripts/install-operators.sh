@@ -96,7 +96,7 @@ install_cluster_scoped_operator() {
 
   ensure_namespace "$namespace"
   log "Installing operator '$package' from $yaml_file..."
-  if ! oc apply -f "$DEPS_DIR/$yaml_file" >/dev/null 2>&1; then
+  if ! envsubst < "$DEPS_DIR/$yaml_file" | oc apply -f - >/dev/null 2>&1; then
     log "Failed to create subscription for '$package'."
     log_fail
     exit 1
@@ -119,12 +119,31 @@ install_namespaced_operator() {
     exit 1
   fi
   log "Installing operator '$package' from $sub_yaml..."
-  if ! oc apply -f "$DEPS_DIR/$sub_yaml" >/dev/null 2>&1; then
+  if ! envsubst < "$DEPS_DIR/$sub_yaml" | oc apply -f - >/dev/null 2>&1; then
     log "Failed to create subscription for '$package'."
     log_fail
     exit 1
   fi
   log "Subscription for '$package' created."
+}
+
+# resolve_nfd_starting_csv: auto-detects the latest NFD CSV for NFD_OPERATOR_CHANNEL
+# if NFD_STARTING_CSV is not already set by the user.
+resolve_nfd_starting_csv() {
+  if [[ -n "$NFD_STARTING_CSV" ]]; then
+    log "Using user-provided NFD_STARTING_CSV: $NFD_STARTING_CSV"
+    return 0
+  fi
+  log "NFD_STARTING_CSV not set, detecting latest CSV for channel '$NFD_OPERATOR_CHANNEL'..."
+  NFD_STARTING_CSV=$(oc get packagemanifest nfd -n openshift-marketplace \
+    -o jsonpath="{.status.channels[?(@.name==\"${NFD_OPERATOR_CHANNEL}\")].currentCSV}" 2>/dev/null)
+  if [[ -z "$NFD_STARTING_CSV" ]]; then
+    log "Failed to detect NFD CSV for channel '$NFD_OPERATOR_CHANNEL'."
+    log_fail
+    exit 1
+  fi
+  log "Detected NFD_STARTING_CSV: $NFD_STARTING_CSV"
+  export NFD_STARTING_CSV
 }
 
 # create_nfd_instance: creates a NodeFeatureDiscovery CR from deps/
@@ -218,6 +237,7 @@ install_deps() {
     log "Node Feature Discovery Operator already installed. Skipping."
   else
     log "Node Feature Discovery Operator not found. Installing..."
+    resolve_nfd_starting_csv
     install_namespaced_operator "$NFD_OPERATOR_NAMESPACE" "nfd-operator-group.yaml" "nfd-subscription.yaml" "$NFD_OPERATOR_PACKAGE"
     wait_for_csv "$NFD_OPERATOR_NAMESPACE" "$NFD_OPERATOR_PACKAGE"
     # create NFD instance

@@ -17,6 +17,8 @@ In order to be able to set everything up you need to have installed:
 - [oc](https://docs.redhat.com/en/documentation/openshift_container_platform/4.8/html/cli_tools/openshift-cli-oc)
 - [kubectl](https://kubernetes.io/docs/reference/kubectl/)
 - [argocd](https://argo-cd.readthedocs.io/en/stable/cli_installation/)
+- [openssl](https://github.com/openssl/openssl)
+- [envsubst](https://github.com/a8m/envsubst)
 
 #### Setup the `private-env` file
 
@@ -213,11 +215,19 @@ When `IS_SECONDARY_INSTANCE=true`:
 
 The following variables have built-in defaults and do not need to be set in `private-env` unless you want to change them:
 
-| Variable                        | Default               | Description                                                     |
-| ------------------------------- | --------------------- | --------------------------------------------------------------- |
-| `ARGOCD_NAMESPACE`              | `openshift-gitops`    | Namespace where ArgoCD (OpenShift GitOps) is installed.         |
-| `PAC_NAMESPACE`                 | `openshift-pipelines` | Namespace where OpenShift Pipelines and Pipelines-as-Code run.  |
-| `LIGHTSPEED_POSTGRES_NAMESPACE` | `lightspeed-postgres` | Namespace where the LightSpeed PostgreSQL instance is deployed. |
+| Variable                        | Default                                   | Description                                                                                                             |
+| ------------------------------- | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `ARGOCD_NAMESPACE`              | `openshift-gitops`                        | Namespace where ArgoCD (OpenShift GitOps) is installed.                                                                 |
+| `PAC_NAMESPACE`                 | `openshift-pipelines`                     | Namespace where OpenShift Pipelines and Pipelines-as-Code run.                                                          |
+| `LIGHTSPEED_POSTGRES_NAMESPACE` | `lightspeed-postgres`                     | Namespace where the LightSpeed PostgreSQL instance is deployed.                                                         |
+| `GITOPS_OPERATOR_CHANNEL`       | `latest`                                  | Subscription channel for the OpenShift GitOps operator.                                                                 |
+| `GITOPS_STARTING_CSV`           | `openshift-gitops-operator.v1.19.1`       | Starting CSV for the OpenShift GitOps operator.                                                                         |
+| `PIPELINES_OPERATOR_CHANNEL`    | `latest`                                  | Subscription channel for the OpenShift Pipelines operator.                                                              |
+| `PIPELINES_STARTING_CSV`        | `openshift-pipelines-operator-rh.v1.21.0` | Starting CSV for the OpenShift Pipelines operator.                                                                      |
+| `NFD_OPERATOR_CHANNEL`          | `stable-4.20`                             | Subscription channel for the Node Feature Discovery operator. Set to `stable-4.19` when running on an OCP 4.19 cluster. |
+| `NFD_STARTING_CSV`              | `nfd.4.20.0-202601280915`                 | Starting CSV for the Node Feature Discovery operator.                                                                   |
+| `GPU_OPERATOR_CHANNEL`          | `v25.10`                                  | Subscription channel for the NVIDIA GPU operator.                                                                       |
+| `GPU_STARTING_CSV`              | `gpu-operator-certified.v25.10.1`         | Starting CSV for the NVIDIA GPU operator.                                                                               |
 
 These can be set in `private-env` or passed directly on the command line:
 
