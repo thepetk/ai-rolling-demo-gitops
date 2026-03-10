@@ -18,20 +18,22 @@ uv run playwright install chromium
 
 ## Required Environment Variables
 
-| Variable      | Description                                     | Example                              |
-| ------------- | ----------------------------------------------- | ------------------------------------ |
-| `BASE_URL`    | Root URL of the RHDH instance (no trailing `/`) | `https://rolling-demo-backstage-...` |
-| `RH_USERNAME` | Red Hat SSO username                            | `demo-user`                          |
-| `RH_PASSWORD` | Red Hat SSO password                            | `s3cr3t`                             |
-| `OTP_SECRET`  | OTP Secret in Base32                            | `s3cr3t`                             |
+| Variable                     | Description                                          | Example                              |
+| ---------------------------- | ---------------------------------------------------- | ------------------------------------ |
+| `BASE_URL`                   | Root URL of the RHDH instance (no trailing `/`)      | `https://rolling-demo-backstage-...` |
+| `RHDH_ENVIRONMENT`           | Backstage auth environment name                      | `development`                        |
+| `ROLLING_DEMO_TEST_USERNAME` | Username of the test user to impersonate in Keycloak | `demo-user`                          |
+| `KEYCLOAK_CLIENT_ID`         | Client ID of the Keycloak service account            | `my-client`                          |
+| `KEYCLOAK_CLIENT_SECRET`     | Client secret of the Keycloak service account        | `mys3cr3t`                           |
 
 Export them before running tests:
 
 ```bash
 export BASE_URL=https://rolling-demo-backstage-rolling-demo-ns.apps.example.com
-export RH_USERNAME=demo-user
-export RH_PASSWORD=s3cr3t
-export OTP_SECRET=s3cr3t
+export RHDH_ENVIRONMENT=development
+export ROLLING_DEMO_TEST_USERNAME=demo-user
+export KEYCLOAK_CLIENT_ID=my-client
+export KEYCLOAK_CLIENT_SECRET=s3cr3t
 ```
 
 ## Running Tests
