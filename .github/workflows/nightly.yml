@@ -36,9 +36,10 @@ jobs:
         working-directory: tests
         env:
           BASE_URL: ${{ secrets.BASE_URL }}
-          RH_USERNAME: ${{ secrets.RH_USERNAME }}
-          RH_PASSWORD: ${{ secrets.RH_PASSWORD }}
-          OTP_SECRET: ${{ secrets.OTP_SECRET }}
+          RHDH_ENVIRONMENT: ${{ secrets.RHDH_ENVIRONMENT }}
+          ROLLING_DEMO_TEST_USERNAME: ${{ secrets.ROLLING_DEMO_TEST_USERNAME }}
+          KEYCLOAK_CLIENT_ID: ${{ secrets.KEYCLOAK_CLIENT_ID }}
+          KEYCLOAK_CLIENT_SECRET: ${{ secrets.KEYCLOAK_CLIENT_SECRET }}
         run: uv run pytest -v
 
       - name: Notify Slack on failure
