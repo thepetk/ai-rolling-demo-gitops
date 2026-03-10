@@ -159,6 +159,7 @@ def authenticated_page(base_url: "str") -> "Page":
     keycloak_authenticated_session = keycloak_realm.get_authenticated_session(keycloak_user_id, keycloak_token)
 
     with sync_playwright() as playwright:
+        # launch chromium browser for testing
         browser: Browser = playwright.chromium.launch(
             headless=True,
             args=["--disable-blink-features=AutomationControlled"],
@@ -175,13 +176,14 @@ def authenticated_page(base_url: "str") -> "Page":
         context.add_init_script(
             "Object.defineProperty(navigator, 'webdriver', {get: () => undefined})"
         )
+        # authenticate externally the browser session
         context.add_cookies(keycloak_authenticated_session)
         page: "Page" = context.new_page()
 
         # navigate to the RHDH login page
         page.goto(base_url, wait_until="networkidle")
 
-        # trigger the popup — Keycloak will find the injected session cookies
+        # trigger the popup. Keycloak will find the injected session cookies
         with context.expect_page() as page_info:
             page.click("button:has-text('Sign in')")
 
