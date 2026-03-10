@@ -16,7 +16,7 @@ export RHDH_BASE_URL RHDH_CALLBACK_URL
 # check_tools: verifies that all required CLI tools are installed
 check_tools() {
   local missing=()
-  local tools=("oc" "kubectl" "yq" "argocd" "cosign")
+  local tools=("oc" "kubectl" "yq" "argocd" "cosign" "openssl" "envsubst")
 
   for tool in "${tools[@]}"; do
     if ! command -v "$tool" >/dev/null 2>&1; then

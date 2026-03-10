@@ -23,3 +23,20 @@ RHDH_NAMESPACE="${RHDH_NAMESPACE:-rolling-demo-ns}"
 
 # ARGOCD_APP_NAME: The name of the ArgoCD application that will be deployed
 ARGOCD_APP_NAME="${ARGOCD_APP_NAME:-rolling-demo}"
+
+# GitOps operator subscription settings
+GITOPS_OPERATOR_CHANNEL="${GITOPS_OPERATOR_CHANNEL:-latest}"
+GITOPS_STARTING_CSV="${GITOPS_STARTING_CSV:-openshift-gitops-operator.v1.19.1}"
+
+# Pipelines operator subscription settings
+PIPELINES_OPERATOR_CHANNEL="${PIPELINES_OPERATOR_CHANNEL:-latest}"
+PIPELINES_STARTING_CSV="${PIPELINES_STARTING_CSV:-openshift-pipelines-operator-rh.v1.21.0}"
+
+# NFD operator subscription settings
+# If NFD_STARTING_CSV is not set, it will be auto-detected from the cluster catalog.
+NFD_OPERATOR_CHANNEL="${NFD_OPERATOR_CHANNEL:-stable}"
+NFD_STARTING_CSV="${NFD_STARTING_CSV:-}"
+
+# GPU operator subscription settings
+GPU_OPERATOR_CHANNEL="${GPU_OPERATOR_CHANNEL:-v25.10}"
+GPU_STARTING_CSV="${GPU_STARTING_CSV:-gpu-operator-certified.v25.10.1}"

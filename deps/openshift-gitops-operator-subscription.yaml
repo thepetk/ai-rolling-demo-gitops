@@ -14,9 +14,9 @@ metadata:
   labels:
     operators.coreos.com/openshift-gitops-operator.openshift-operators: ''
 spec:
-  channel: latest
+  channel: ${GITOPS_OPERATOR_CHANNEL}
   installPlanApproval: Automatic
   name: openshift-gitops-operator
   source: redhat-operators
   sourceNamespace: openshift-marketplace
-  startingCSV: openshift-gitops-operator.v1.19.1
+  startingCSV: ${GITOPS_STARTING_CSV}
