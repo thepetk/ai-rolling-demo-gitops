@@ -17,3 +17,6 @@ markers = [
     "smoke: quick sanity checks that do not require authentication",
     "auth_required: tests that require a logged-in session",
 ]
+filterwarnings = [
+    "ignore::urllib3.exceptions.InsecureRequestWarning",
+]

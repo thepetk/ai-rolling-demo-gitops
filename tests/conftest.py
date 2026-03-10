@@ -160,7 +160,7 @@ def authenticated_page(base_url: "str") -> "Page":
 
     with sync_playwright() as playwright:
         browser: Browser = playwright.chromium.launch(
-            headless=False,
+            headless=True,
             args=["--disable-blink-features=AutomationControlled"],
         )
         context: BrowserContext = browser.new_context(
