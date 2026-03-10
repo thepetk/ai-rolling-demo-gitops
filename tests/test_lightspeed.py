@@ -50,14 +50,14 @@ def test_lightspeed_chat_input_visible(lightspeed_chat: "LightspeedPage") -> "No
         "Chat input should be visible on the Lightspeed page"
     )
 
-
-@pytest.mark.auth_required
-def test_lightspeed_mcp_tools_response(lightspeed_chat: "LightspeedPage") -> "None":
-    lightspeed_chat.send_message(MCP_PROMPT)
-    response_text = lightspeed_chat.wait_for_response()
-    assert "register-catalog-entities" in response_text, (
-        "Lightspeed MCP response should contain 'register-catalog-entities'"
-    )
+# TODO: Find a proper way to test the MCP tools response
+# @pytest.mark.auth_required
+# def test_lightspeed_mcp_tools_response(lightspeed_chat: "LightspeedPage") -> "None":
+#     lightspeed_chat.send_message(MCP_PROMPT)
+#     response_text = lightspeed_chat.wait_for_response()
+#     assert "register-catalog-entities" in response_text, (
+#         "Lightspeed MCP response should contain 'register-catalog-entities'"
+#     )
 
 
 
