@@ -241,7 +241,17 @@ global:
                       title: Openshift AI
                       icon: https://upload.wikimedia.org/wikipedia/commons/d/d8/Red_Hat_logo.svg
                       link: https://rhods-dashboard-redhat-ods-applications.apps.rosa.redhat-ai-dev.m6no.p3.openshiftapps.com/
-                
+
+                - mountPoint: global.header/application-launcher
+                  importName: MenuItemLink
+                  config:
+                    section: Quick Links
+                    priority: 139
+                    props:
+                      title: RHDH AI Rolling Demo Monitoring
+                      icon: https://upload.wikimedia.org/wikipedia/commons/a/a1/Grafana_logo.svg
+                      link: https://grafana-route-devcluster-monitoring.apps.rosa.redhat-ai-dev.m6no.p3.openshiftapps.com/
+
                 - mountPoint: global.header/component
                   importName: HelpDropdown
                   config:
