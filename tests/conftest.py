@@ -8,7 +8,7 @@ from playwright.sync_api import sync_playwright, Browser, BrowserContext, Page
 
 # RHDH_BASE_URL: the base URL of the RHDH instance to test, e.g.
 # "https://rhdh.example.com"
-RHDH_BASE_URL = os.getenv("BASE_URL")
+RHDH_BASE_URL = os.getenv("RHDH_BASE_URL")
 
 # RHDH_ENVIRONMENT: the environment name to use when authenticating
 RHDH_ENVIRONMENT = os.getenv("RHDH_ENVIRONMENT")
@@ -143,7 +143,7 @@ def base_url() -> "str":
     """
     returns the base url of RHDH isntance we are testing
     """
-    return _require_env("BASE_URL").rstrip("/")
+    return _require_env("RHDH_BASE_URL").rstrip("/")
 
 
 @pytest.fixture(scope="session")

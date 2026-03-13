@@ -35,7 +35,7 @@ jobs:
       - name: Run tests
         working-directory: tests
         env:
-          BASE_URL: ${{ secrets.BASE_URL }}
+          RHDH_BASE_URL: ${{ secrets.RHDH_BASE_URL }}
           RHDH_ENVIRONMENT: ${{ secrets.RHDH_ENVIRONMENT }}
           ROLLING_DEMO_TEST_USERNAME: ${{ secrets.ROLLING_DEMO_TEST_USERNAME }}
           KEYCLOAK_CLIENT_ID: ${{ secrets.KEYCLOAK_CLIENT_ID }}
