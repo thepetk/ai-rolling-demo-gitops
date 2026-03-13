@@ -36,9 +36,8 @@ export GITOPS_TARGET_REVISION="dev"
 # ODH_SETUP_DIR: the local path to the cloned odh-kubeflow-model-registry-setup repo.
 export ODH_SETUP_DIR="/path/to/odh-kubeflow-model-registry-setup"
 # RHDH_NAMESPACE: the namespace where RHDH and related resources are deployed.
-# Defaults to "rolling-demo-ns" if not set.
 export RHDH_NAMESPACE="rolling-demo-ns"
-# ARGOCD_APP_NAME: the argoCD application name. Defaults to "rolling-demo"
+# ARGOCD_APP_NAME: the argoCD application name.
 export ARGOCD_APP_NAME="rolling-demo"
 
 # Github secrets

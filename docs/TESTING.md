@@ -29,12 +29,12 @@ Assuming you have followed the [SETUP_GUIDE](SETUP_GUIDE.md), you should have al
 Add the required variables to `scripts/private-env`:
 
 ```bash
-# RHDH_BASE_URL can be derived from already exported variables in private-env
+# RHDH_BASE_URL is your RHDH instance base url. It is derived from ARGOCD_APP_NAME, RHDH_NAMESPACE, and RHDH_CLUSTER_ROUTER_BASE.
 export RHDH_BASE_URL="https://${ARGOCD_APP_NAME}-backstage-${RHDH_NAMESPACE}.${RHDH_CLUSTER_ROUTER_BASE}"
 # Default is production unless otherwise set in app-config
 export RHDH_ENVIRONMENT="production"
-# A test user that your client can impersonate to authenticate in RHDH
-export ROLLING_DEMO_TEST_USERNAME="demo-user"
+# Your (or a test user's) keycloak username. This user has to be present both in keycloak but also in RHDH
+export ROLLING_DEMO_TEST_USERNAME="keycloak-demo-user"
 # Optional: set to "false" to run tests with a visible browser window (default: "true")
 export PLAYWRIGHT_HEADLESS="false"
 ```
