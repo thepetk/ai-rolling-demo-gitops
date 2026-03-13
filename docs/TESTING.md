@@ -33,7 +33,8 @@ Add the required variables to `scripts/private-env`:
 export RHDH_BASE_URL="https://${ARGOCD_APP_NAME}-backstage-${RHDH_NAMESPACE}.${RHDH_CLUSTER_ROUTER_BASE}"
 # Default is production unless otherwise set in app-config
 export RHDH_ENVIRONMENT="production"
-# Your (or a test user's) keycloak username. This user has to be present both in keycloak but also in RHDH
+# Your (or a test user's) keycloak username. This user has to be present both in keycloak but also in RHDH.
+# If you have followed the SETUP_GUIDE your keycloak's users should have already been imported in your RHDH instance.
 export ROLLING_DEMO_TEST_USERNAME="keycloak-demo-user"
 # Optional: set to "false" to run tests with a visible browser window (default: "true")
 export PLAYWRIGHT_HEADLESS="false"
