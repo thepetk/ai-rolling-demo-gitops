@@ -14,6 +14,7 @@ if [ ! -f "$PRIVATE_ENV" ]; then
   exit 1
 fi
 
+# shellcheck source=/dev/null
 source "$PRIVATE_ENV"
 
 # Required environment variables for the test suite (see tests/README.md)
