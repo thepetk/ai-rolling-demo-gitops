@@ -59,13 +59,12 @@ def test_lightspeed_chat_input_visible(lightspeed_chat: "LightspeedPage") -> "No
 #         "Lightspeed MCP response should contain 'register-catalog-entities'"
 #     )
 
-
-
-@pytest.mark.auth_required
-def test_lightspeed_chat_history_retrievable(
-    lightspeed_chat: "LightspeedPage"
-) -> "None":
-    history_item = lightspeed_chat.history_item(0)
-    assert history_item.is_visible(), (
-        "At least one chat history item should be visible after sending messages"
-    )
+# TODO: See if this overlaps with Lightspeed Plugin E2E
+# @pytest.mark.auth_required
+# def test_lightspeed_chat_history_retrievable(
+#     lightspeed_chat: "LightspeedPage"
+# ) -> "None":
+#     history_item = lightspeed_chat.history_item(0)
+#     assert history_item.is_visible(), (
+#         "At least one chat history item should be visible after sending messages"
+#     )

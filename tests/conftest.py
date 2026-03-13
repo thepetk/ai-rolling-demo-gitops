@@ -13,6 +13,10 @@ RHDH_BASE_URL = os.getenv("RHDH_BASE_URL")
 # RHDH_ENVIRONMENT: the environment name to use when authenticating
 RHDH_ENVIRONMENT = os.getenv("RHDH_ENVIRONMENT")
 
+# PLAYWRIGHT_HEADLESS: controls whether the browser runs in headless mode.
+# Set to "false" to run with a visible browser window. Defaults to True.
+PLAYWRIGHT_HEADLESS = os.getenv("PLAYWRIGHT_HEADLESS", "true").lower() != "false"
+
 # ROLLING_DEMO_TEST_USERNAME: the username of a test user with permissions
 # to access the RHDH instance for testing purposes.
 ROLLING_DEMO_TEST_USERNAME = os.getenv("ROLLING_DEMO_TEST_USERNAME")
@@ -161,7 +165,7 @@ def authenticated_page(base_url: "str") -> "Page":
     with sync_playwright() as playwright:
         # launch chromium browser for testing
         browser: Browser = playwright.chromium.launch(
-            headless=True,
+            headless=PLAYWRIGHT_HEADLESS,
             args=["--disable-blink-features=AutomationControlled"],
         )
         context: BrowserContext = browser.new_context(

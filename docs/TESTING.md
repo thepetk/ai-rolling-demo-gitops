@@ -35,6 +35,8 @@ export RHDH_BASE_URL="https://${ARGOCD_APP_NAME}-backstage-${RHDH_NAMESPACE}.${R
 export RHDH_ENVIRONMENT="production"
 # A test user that your client can impersonate to authenticate in RHDH
 export ROLLING_DEMO_TEST_USERNAME="demo-user"
+# Optional: set to "false" to run tests with a visible browser window (default: "true")
+export PLAYWRIGHT_HEADLESS="false"
 ```
 
 Then run:
