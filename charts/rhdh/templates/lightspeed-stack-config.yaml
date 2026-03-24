@@ -18,13 +18,13 @@ data:
       url: http://localhost:8321
     user_data_collection:
       feedback_enabled: true
-      feedback_storage: "/tmp/data/feedback"
+      feedback_storage: '/tmp/data/feedback'
     authentication:
-      module: "noop"
+      module: 'noop'
     conversation_cache:
-      type: "sqlite"
+      type: 'sqlite'
       sqlite:
-        db_path: "/tmp/cache.db"
+        db_path: '/tmp/cache.db'
     mcp_servers:
       - name: mcp-integration-tools
         provider_id: "model-context-protocol"
