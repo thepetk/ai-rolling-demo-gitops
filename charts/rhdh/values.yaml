@@ -91,8 +91,22 @@ global:
 
       # Tekton Pipelines Plugins
       # Tekton CI Plugins
-      - package: ./dynamic-plugins/dist/backstage-community-plugin-tekton
+      - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-community-plugin-tekton:bs_1.45.3__3.33.3
         disabled: false
+        pluginConfig:
+          dynamicPlugins:
+            frontend:
+              backstage-community.plugin-tekton:
+                mountPoints:
+                  - config:
+                      if:
+                        allOf:
+                          - isTektonCIAvailable
+                      layout:
+                        gridColumn: 1 / -1
+                        gridRowStart: 1
+                    importName: TektonCI
+                    mountPoint: entity.page.ci/cards
 
       ##### Default Backstage Dynamic Plugins #####
       # Plugin for global header customization
@@ -615,9 +629,9 @@ backstage:
         - name: lightspeed-stack
           configMap:
             name: lightspeed-stack
-        - name: llama-stack-run-no-guard
+        - name: llama-stack-config
           configMap:
-            name: llama-stack-run-no-guard
+            name: llama-stack-config
         # tmp backstage volume for scaffolder tasks
         - name: backstage-tmp
           emptyDir: {}
