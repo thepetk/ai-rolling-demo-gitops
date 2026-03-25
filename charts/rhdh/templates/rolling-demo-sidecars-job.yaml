@@ -3,7 +3,7 @@ kind: Job
 metadata:
   name: update-deployment-containers
   annotations:
-    argocd.argoproj.io/hook: PostSync
+    argocd.argoproj.io/hook: Sync
 spec:
   template:
     spec:
@@ -17,7 +17,7 @@ spec:
               NAMESPACE="{{ .Release.Namespace }}"
 
               echo "Waiting deployment ${DEPLOYMENT} to be available.."
-              kubectl rollout status deployment/$DEPLOYMENT -n $NAMESPACE --timeout=600s
+              kubectl rollout status deployment/$DEPLOYMENT -n $NAMESPACE --timeout=120s || echo "Deployment not fully ready, proceeding anyway..."
 
               echo "Checking if containers already exist in deployment..."
               CONTAINERS=$(kubectl get deployment $DEPLOYMENT -n $NAMESPACE -o json | jq '.spec.template.spec.containers[] | .name')
