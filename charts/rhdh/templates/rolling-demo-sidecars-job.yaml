@@ -111,9 +111,6 @@ spec:
                 "envFrom": [
                   { "secretRef": { "name": "llama-stack-secrets" } }
                 ],
-                "env": [
-                  { "name": "MCP_TOKEN", "valueFrom": { "secretKeyRef": { "name": "rhdh-secrets", "key": "MCP_TOKEN" } } }
-                ],
                 "image": "quay.io/lightspeed-core/lightspeed-stack:dev-20260316-b2f54cf",
                 "imagePullPolicy": "Always",
                 "ports": [{ "containerPort": 8080, "name": "lcs-backend", "protocol": "TCP" }],
@@ -122,7 +119,8 @@ spec:
                   { "mountPath": "/app-root/config.yaml", "name": "llama-stack-config", "subPath": "config.yaml" },
                   { "mountPath": "/app-root/rhdh-profile.py", "name": "rhdh-profile", "subPath": "rhdh-profile.py" },
                   { "mountPath": "/rag-content", "name": "rag-data-volume" },
-                  { "mountPath": "/tmp/data/feedback", "name": "shared-storage" }
+                  { "mountPath": "/tmp/data/feedback", "name": "shared-storage" },
+                  { "mountPath": "/app-root/lightspeed-stack/mcp-auth-token", "name": "mcp-auth-token", "subPath": "mcp-auth-token" }
                 ]
               }
               EOF
