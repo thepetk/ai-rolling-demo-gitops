@@ -646,9 +646,9 @@ backstage:
           emptyDir: {}
         - name: mcp-auth-token
           secret:
-            secretName: llama-stack-secrets
+            secretName: rhdh-secrets
             items:
-              - key: MCP_AUTH_TOKEN
+              - key: MCP_TOKEN
                 path: mcp-auth-token
       initContainers:
         - name: install-dynamic-plugins

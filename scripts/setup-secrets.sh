@@ -21,7 +21,6 @@ kubectl create secret generic "$SECRET_NAME" \
     --namespace="$RHDH_NAMESPACE" \
     --from-literal=OLLAMA_URL="$OLLAMA_URL" \
     --from-literal=OLLAMA_TOKEN="$OLLAMA_TOKEN" \
-    --from-literal=MCP_AUTH_TOKEN="Bearer $MCP_TOKEN" \
     --dry-run=client -o yaml | kubectl apply --filename - --overwrite=true >/dev/null
 log "Secret $SECRET_NAME created successfully."
 
