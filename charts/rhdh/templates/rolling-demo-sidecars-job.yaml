@@ -108,6 +108,9 @@ spec:
               cat > "${TEMP_DIR}/lightspeed-core-sidecar.json" <<EOF
               {
                 "name": "lightspeed-core",
+                "env": [
+                  { "name": "MCP_TOKEN", "valueFrom": { "secretKeyRef": { "name": "rhdh-secrets", "key": "MCP_TOKEN" } } }
+                ],
                 "envFrom": [
                   { "secretRef": { "name": "llama-stack-secrets" } }
                 ],
