@@ -347,8 +347,8 @@ backstage:
     backstage:
       image:
         registry: quay.io
-        repository: rhdh-community/rhdh
-        tag: "pr-4491"
+        repository: rhdh/rhdh-hub-rhel9
+        tag: "1.10-87"
         pullSecrets:
           - quay-pull-secret
       command: []
