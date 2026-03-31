@@ -108,6 +108,7 @@ spec:
               cat > "${TEMP_DIR}/llama-stack-sidecar.json" <<EOF
               {
                 "name": "llama-stack",
+                "command": ["/bin/bash", "-c", "pip install google-auth google-cloud-aiplatform --quiet && llama stack run /app-root/run.yaml"],
                 "env": [
                   { "name": "GOOGLE_APPLICATION_CREDENTIALS", "value": "/gcp/credentials.json" }
                 ],
