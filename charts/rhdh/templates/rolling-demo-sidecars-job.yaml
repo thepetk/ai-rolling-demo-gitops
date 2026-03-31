@@ -108,6 +108,9 @@ spec:
               cat > "${TEMP_DIR}/llama-stack-sidecar.json" <<EOF
               {
                 "name": "llama-stack",
+                "env": [
+                  { "name": "GOOGLE_APPLICATION_CREDENTIALS", "value": "/gcp/credentials.json" }
+                ],
                 "envFrom": [
                   { "secretRef": { "name": "llama-stack-secrets" } }
                 ],
@@ -117,7 +120,8 @@ spec:
                   { "mountPath": "/app-root/.llama", "name": "shared-storage" },
                   { "mountPath": "/rag-content/embeddings_model", "name": "rag-data-volume", "subPath": "embeddings_model" },
                   { "mountPath": "/rag-content/vector_db/rhdh_product_docs", "name": "rag-data-volume", "subPath": "rhdh_product_docs" },
-                  { "mountPath": "/app-root/run.yaml", "name": "llama-stack-run-no-guard", "subPath": "run.yaml" }
+                  { "mountPath": "/app-root/run.yaml", "name": "llama-stack-run-no-guard", "subPath": "run.yaml" },
+                  { "mountPath": "/gcp", "name": "gcp-credentials", "readOnly": true }
                 ]
               }
               EOF

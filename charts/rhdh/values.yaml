@@ -641,6 +641,12 @@ backstage:
           emptyDir: {}
         - name: extensions-catalog
           emptyDir: {}
+        - name: gcp-credentials
+          secret:
+            secretName: llama-stack-secrets
+            items:
+              - key: gcp-credentials.json
+                path: credentials.json
       initContainers:
         - name: install-dynamic-plugins
           image: '{{ include "backstage.image" . }}'
