@@ -114,7 +114,7 @@ spec:
                 "envFrom": [
                   { "secretRef": { "name": "llama-stack-secrets" } }
                 ],
-                "image": "quay.io/tpetkos/llama-stack:0.1.4",
+                "image": "quay.io/opendatahub/llama-stack:07a97331b3a8831e76ec15c833d2dcf6fa0a34c9",
                 "imagePullPolicy": "Always",
                 "volumeMounts": [
                   { "mountPath": "/app-root/.llama", "name": "shared-storage" },
@@ -129,7 +129,7 @@ spec:
               cat > "${TEMP_DIR}/lightspeed-core-sidecar.json" <<EOF
               {
                 "name": "lightspeed-core",
-                "image": "quay.io/lightspeed-core/lightspeed-stack:0.4.0",
+                "image": "quay.io/tpetkos/lightspeed-stack:dev-metrics-judge",
                 "imagePullPolicy": "Always",
                 "ports": [{ "containerPort": 8080, "name": "lcs-backend", "protocol": "TCP" }],
                 "volumeMounts": [
