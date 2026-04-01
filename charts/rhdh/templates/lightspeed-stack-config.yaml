@@ -19,6 +19,7 @@ data:
     llm_judge:
       enabled: true
       model: "vllm/redhataillama-31-8b-instruct"
+      sampling_rate: 0.1
     user_data_collection:
       feedback_enabled: true
       feedback_storage: '/tmp/data/feedback'
