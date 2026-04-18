@@ -88,6 +88,9 @@ global:
         disabled: true
       - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-catalog-techdoc-url-reader-backend:bs_1.45.3__0.5.0
         disabled: true
+      # Kagenti catalog module
+      - package: oci://quay.io/tpetkos/catalog-backend-module-kagenti:v0.1.0
+        disabled: false
 
       # Tekton Pipelines Plugins
       # Tekton CI Plugins
@@ -734,3 +737,6 @@ backstage:
       caCertificate: ""
       destinationCACertificate: ""
       insecureEdgeTerminationPolicy: "Redirect"
+
+rhoai:
+  enabled: false
