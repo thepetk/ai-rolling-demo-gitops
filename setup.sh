@@ -83,6 +83,8 @@ else
 fi
 if [[ "${SKIP_RHOAI_SETUP}" == "true" ]]; then
   log "SKIP_RHOAI_SETUP=true — skipping ODH Kubeflow Model Registry setup."
+  log "Disabling RHOAI in charts/rhdh/values.yaml..."
+  yq e '.rhoai.enabled = false' -i "$SCRIPTS_DIR/../charts/rhdh/values.yaml"
 else
   bash "$SCRIPTS_DIR/setup-rhoai.sh"
 fi
