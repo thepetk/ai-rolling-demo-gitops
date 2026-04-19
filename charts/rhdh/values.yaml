@@ -330,7 +330,7 @@ global:
         disabled: false
 
       # Custom Plugins
-      - package: oci://quay.io/tpetkos/catalog-backend-module-kagenti:v0.1.0
+      - package: oci://quay.io/tpetkos/catalog-backend-module-kagenti:v0.1.1
         disabled: false
 
   clusterRouterBase: apps.rosa.redhat-ai-dev.m6no.p3.openshiftapps.com
