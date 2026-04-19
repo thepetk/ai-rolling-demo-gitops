@@ -458,6 +458,22 @@ backstage:
             - target: https://github.com/redhat-ai-dev/llama-stack-agentic-sample/blob/ai-rolling-demo-1_9/all.yaml
               type: url
           providers:
+            # Custom kagenti provider
+            kagenti:
+              production:
+                baseUrl: "${KAGENTI_BASE_URL}"
+                clientId: "${KAGENTI_CLIENT_ID}"
+                clientSecret: "${KAGENTI_CLIENT_SECRET}"
+                tokenUrl: "https://keycloak-keycloak.apps.rosa.zp4ey-oyui2-gmn.pg3c.p3.openshiftapps.com/realms/kagenti/protocol/openid-connect/token"
+                namespaces:
+                  - team1
+                  - team2
+                lifecycleMapping:
+                  team1: experimental
+                  team2: production
+                schedule:
+                  frequency: { seconds: 60 }
+                  timeout: { minutes: 3 }
             modelCatalog:
               development:
                 baseUrl: http://localhost:9090
@@ -599,6 +615,7 @@ backstage:
         - argocd-secrets
         - lightspeed-secrets
         - llama-stack-secrets
+        - kagenti-secrets
       args:
         - "--config"
         - dynamic-plugins-root/app-config.dynamic-plugins.yaml
