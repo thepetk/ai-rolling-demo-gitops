@@ -45,7 +45,7 @@ global:
         disabled: false
 
       # Lightspeed Plugins
-      - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed:bs_1.45.3__1.4.0
+      - package: oci://quay.io/tpetkos/lightspeed:v0.1.26
         disabled: false
         pluginConfig:
           dynamicPlugins:
@@ -72,16 +72,16 @@ global:
                     config:
                       id: lightspeed
                       priority: 100
-      - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-lightspeed-backend:bs_1.45.3__1.4.0
+      - package: oci://quay.io/tpetkos/lightspeed-backend:v0.1.26
         disabled: false
 
       # MCP Actions plugins
       - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/backstage-plugin-mcp-actions-backend:bs_1.45.3__0.1.5
-        disabled: false
+        disabled: true
       - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-software-catalog-mcp-tool:bs_1.45.3__0.4.1
-        disabled: false
+        disabled: true
       - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-techdocs-mcp-tool:bs_1.45.3__0.3.2
-        disabled: false
+        disabled: true
 
       # Model Catalog Plugins
       - package: oci://ghcr.io/redhat-developer/rhdh-plugin-export-overlays/red-hat-developer-hub-backstage-plugin-catalog-backend-module-model-catalog:bs_1.45.3__0.9.0
