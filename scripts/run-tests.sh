@@ -14,6 +14,10 @@ if [ -f "$PRIVATE_ENV" ]; then
   source "$PRIVATE_ENV"
 fi
 
+# Default RHDH_BASE_URL from CI_HOSTNAME if not already set (matches ci-setup.sh and the CI workflow)
+CI_HOSTNAME="${CI_HOSTNAME:-rhdh-ci.apps.testing}"
+RHDH_BASE_URL="${RHDH_BASE_URL:-https://$CI_HOSTNAME}"
+
 # Required environment variables for the test suite (see tests/README.md)
 required_vars=(
   RHDH_BASE_URL
@@ -80,4 +84,4 @@ cd "$TESTS_DIR" && env \
   KEYCLOAK_CLIENT_ID="$KEYCLOAK_CLIENT_ID" \
   KEYCLOAK_CLIENT_SECRET="$KEYCLOAK_CLIENT_SECRET" \
   PLAYWRIGHT_HEADLESS="${PLAYWRIGHT_HEADLESS:-true}" \
-  uv run pytest -v ${PYTEST_EXTRA_ARGS:-}
+  uv run pytest -v "${PYTEST_EXTRA_ARGS:-}"

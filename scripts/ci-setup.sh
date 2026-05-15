@@ -19,7 +19,7 @@ fi
 # CI_HOSTNAME: a consistent hostname for CI, but allow override
 # for flexibility in local testing
 CI_HOSTNAME="${CI_HOSTNAME:-rhdh-ci.apps.testing}"
-export RHDH_BASE_URL="http://$CI_HOSTNAME"
+export RHDH_BASE_URL="https://$CI_HOSTNAME"
 export RHDH_CALLBACK_URL="$RHDH_BASE_URL/api/auth/oidc/handler/frame"
 
 # auto-generate secrets not provided externally
@@ -29,18 +29,18 @@ export POSTGRESQL_USER_PASSWORD="${POSTGRESQL_USER_PASSWORD:-$(openssl rand -hex
 
 # use stub values for GitHub App integration which is not tested in CI
 export GITOPS_GIT_ORG="${GITOPS_GIT_ORG:-ci-placeholder}"
-export GITHUB_APP_APP_ID="${GITHUB_APP_APP_ID:-0}"
-export GITHUB_APP_CLIENT_ID="${GITHUB_APP_CLIENT_ID:-ci-placeholder}"
-export GITHUB_APP_CLIENT_SECRET="${GITHUB_APP_CLIENT_SECRET:-ci-placeholder}"
-export GITHUB_APP_WEBHOOK_URL="${GITHUB_APP_WEBHOOK_URL:-http://ci-placeholder}"
-export GITHUB_APP_WEBHOOK_SECRET="${GITHUB_APP_WEBHOOK_SECRET:-ci-placeholder}"
-export GITHUB_APP_PRIVATE_KEY="${GITHUB_APP_PRIVATE_KEY:-ci-placeholder}"
+export GITHUB_APP_APP_ID="${GH_APP_APP_ID:-${GITHUB_APP_APP_ID:-0}}"
+export GITHUB_APP_CLIENT_ID="${GH_APP_CLIENT_ID:-${GITHUB_APP_CLIENT_ID:-ci-placeholder}}"
+export GITHUB_APP_CLIENT_SECRET="${GH_APP_CLIENT_SECRET:-${GITHUB_APP_CLIENT_SECRET:-ci-placeholder}}"
+export GITHUB_APP_WEBHOOK_URL="${GH_APP_WEBHOOK_URL:-${GITHUB_APP_WEBHOOK_URL:-http://ci-placeholder}}"
+export GITHUB_APP_WEBHOOK_SECRET="${GH_APP_WEBHOOK_SECRET:-${GITHUB_APP_WEBHOOK_SECRET:-ci-placeholder}}"
+export GITHUB_APP_PRIVATE_KEY="${GH_APP_PRIVATE_KEY:-${GITHUB_APP_PRIVATE_KEY:-ci-placeholder}}"
 
 # use stub values for services not deployed in CI
 export OLLAMA_URL="${OLLAMA_URL:-}"
 export OLLAMA_TOKEN="${OLLAMA_TOKEN:-}"
 export ARGOCD_USER="${ARGOCD_USER:-admin}"
-export ARGOCD_PASSWORD="${ARGOCD_PASSWORD:-}"
+export ARGOCD_PASSWORD="${ARGOCD_PASSWORD:-$(openssl rand -base64 16)}"
 export ARGOCD_HOSTNAME="${ARGOCD_HOSTNAME:-}"
 export ARGOCD_API_TOKEN="${ARGOCD_API_TOKEN:-}"
 
@@ -53,6 +53,8 @@ export VALIDATION_MODEL_NAME="${VALIDATION_MODEL_NAME:?VALIDATION_MODEL_NAME mus
 export LIGHTSPEED_POSTGRES_USER="${LIGHTSPEED_POSTGRES_USER:?LIGHTSPEED_POSTGRES_USER must be set}"
 export LIGHTSPEED_POSTGRES_PASSWORD="${LIGHTSPEED_POSTGRES_PASSWORD:?LIGHTSPEED_POSTGRES_PASSWORD must be set}"
 export LIGHTSPEED_POSTGRES_DB="${LIGHTSPEED_POSTGRES_DB:?LIGHTSPEED_POSTGRES_DB must be set}"
+export NOTEBOOKS_QUERY_PROVIDER_ID="${NOTEBOOKS_QUERY_PROVIDER_ID:?NOTEBOOKS_QUERY_PROVIDER_ID must be set}"
+export NOTEBOOKS_QUERY_MODEL="${NOTEBOOKS_QUERY_MODEL:?NOTEBOOKS_QUERY_MODEL must be set}"
 
 # we consider this to be a secondary instance. This will skip pipelines-as-code-secret
 # and lightspeed-postgres-info secrets, since their namespaces do not exist on kind
@@ -102,8 +104,23 @@ helm install "$ARGOCD_APP_NAME" "$GITOPS_DIR/charts/rhdh" \
   --namespace "$RHDH_NAMESPACE" \
   -f "$GITOPS_DIR/charts/rhdh/values.yaml" \
   -f "$GITOPS_DIR/ci/values-ci.yaml" \
-  --timeout 6m \
+  --set 'global.dynamic.plugins[8].disabled=true' \
+  --set 'global.dynamic.plugins[9].disabled=true' \
+  --timeout 20m \
   --wait
+
+# generate a self-signed TLS certificate so node-openid-client accepts the HTTPS callback URL
+log "Generating self-signed TLS certificate for $CI_HOSTNAME..."
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+  -keyout /tmp/ci-tls.key \
+  -out /tmp/ci-tls.crt \
+  -subj "/CN=$CI_HOSTNAME" \
+  -addext "subjectAltName=DNS:$CI_HOSTNAME" \
+  2>/dev/null
+kubectl create secret tls rhdh-tls \
+  --cert=/tmp/ci-tls.crt \
+  --key=/tmp/ci-tls.key \
+  --namespace "$RHDH_NAMESPACE"
 
 # ingress component for backstage using the CI_HOSTNAME value
 log "Creating Ingress for RHDH..."
@@ -118,6 +135,10 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - $CI_HOSTNAME
+      secretName: rhdh-tls
   rules:
     - host: $CI_HOSTNAME
       http:
